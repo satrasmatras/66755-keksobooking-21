@@ -185,8 +185,8 @@ const generatePin = (offer) => {
   const fragment = document.createDocumentFragment();
 
   const pinElement = pinTemplate.cloneNode(true);
-  pinElement.style.left = `${offer.location.x - pinElement.clientWidth / 2}px`;
-  pinElement.style.top = `${offer.location.y - pinElement.clientHeight / 2}px`;
+  pinElement.style.left = `${offer.location.x - getElementWidth(pinElement) / 2}px`;
+  pinElement.style.top = `${offer.location.y - getElementWidth(pinElement) / 2}px`;
 
   const pinImage = pinElement.querySelector(`img`);
   pinImage.src = offer.author.avatar;
