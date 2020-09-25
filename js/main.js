@@ -1,6 +1,7 @@
 'use strict';
 
 const OFFERS_COUNT = 8;
+
 const AVATARS_COUNT = 8;
 
 const TYPES = [
@@ -62,7 +63,7 @@ const MIN_LOCATION_Y = 130;
 const MAX_LOCATION_Y = 630;
 
 const MIN_PHOTOS_COUNT = 3;
-const MAX_PHOTOS_COUNT = 10;
+const MAX_PHOTOS_COUNT = 7;
 
 const getElementWidth = (element) => {
   return element.clientWidth;
@@ -72,7 +73,7 @@ const getRandomNumberInRange = (min, max) => {
   return Math.round(Math.random() * (max - min)) + min;
 };
 
-const getRandomFromArray = (array) => {
+const getRandomItemFromArray = (array) => {
   return array[getRandomNumberInRange(0, array.length - 1)];
 };
 
@@ -84,7 +85,7 @@ const createAscendingArray = (length, start = 0) => {
   return Array.from(Array(length).keys()).map((id) => id + start);
 };
 
-const shuffle = (array) => {
+const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -99,7 +100,7 @@ const generateRandomPhotoArray = () => {
 
 const createRandomGenerator = (array) => {
   const generatorArray = [...array];
-  shuffle(generatorArray);
+  shuffleArray(generatorArray);
 
   return function* () {
     for (let i = 0; i < generatorArray.length; i++) {
@@ -129,13 +130,13 @@ const generateOffer = (
     getRandomNumberInRange(MIN_LOCATION_Y, MAX_LOCATION_Y)
   ];
   const price = getRandomNumberInRange(MIN_OFFER_PRICE, MAX_OFFER_PRICE);
-  const type = getRandomFromArray(TYPES);
+  const type = getRandomItemFromArray(TYPES);
   const rooms = getRandomNumberInRange(1, MAX_ROOMS);
   const guests = getRandomNumberInRange(1, MAX_GUESTS);
-  const checkin = getRandomFromArray(CHECK_TIMES);
-  const checkout = getRandomFromArray(CHECK_TIMES);
+  const checkin = getRandomItemFromArray(CHECK_TIMES);
+  const checkout = getRandomItemFromArray(CHECK_TIMES);
   const features = getRandomItemsFromArray(FEATURES);
-  const description = getRandomFromArray(DESCRIPTIONS_MOCK);
+  const description = getRandomItemFromArray(DESCRIPTIONS_MOCK);
   const photos = generateRandomPhotoArray();
 
   return {
@@ -165,10 +166,11 @@ const generateOffer = (
 const generateOffers = (count) => {
   const avatarGenerator = createAvatarsGenerator();
   const titleGenerator = createTitlesGenerator();
-  let offers = [];
+  const offers = [];
 
   for (let i = 0; i < count; i++) {
-    offers = [...offers, generateOffer({avatarGenerator, titleGenerator})];
+    const offer = generateOffer({avatarGenerator, titleGenerator});
+    offers.push(offer);
   }
 
   return offers;
@@ -181,9 +183,8 @@ const getPinTemplate = () => {
     .querySelector(`.map__pin`);
 };
 
-const generatePin = (offer) => {
+const generatePinElement = (offer) => {
   const pinTemplate = getPinTemplate();
-  const fragment = document.createDocumentFragment();
 
   const pinElement = pinTemplate.cloneNode(true);
   pinElement.style.left = `${offer.location.x - getElementWidth(pinElement) / 2}px`;
@@ -193,24 +194,26 @@ const generatePin = (offer) => {
   pinImage.src = offer.author.avatar;
   pinImage.alt = offer.offer.title;
 
-  fragment.append(pinElement);
-  return fragment;
+  return pinElement;
 };
 
-const generatePins = (offers) => {
-  let pinElements = [];
+const generatePinElements = (offers) => {
+  const pinElements = [];
 
   offers.forEach((offer) => {
-    const pinElement = generatePin(offer);
-    pinElements = [...pinElements, pinElement];
+    const pinElement = generatePinElement(offer);
+    pinElements.push(pinElement);
   });
 
   return pinElements;
 };
 
 const renderPins = (pins) => {
+  const fragment = document.createDocumentFragment();
   const mapPins = document.querySelector(`.map__pins`);
-  mapPins.append(...pins);
+
+  fragment.append(...pins);
+  mapPins.append(fragment);
 };
 
 const mapElement = document.querySelector(`.map`);
@@ -220,6 +223,5 @@ const offers = generateOffers(OFFERS_COUNT);
 
 mapElement.classList.remove(`map--faded`);
 
-const pins = generatePins(offers);
-
-renderPins(pins);
+const pinElements = generatePinElements(offers);
+renderPins(pinElements);
