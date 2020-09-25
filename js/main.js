@@ -98,7 +98,7 @@ const generateRandomPhotoArray = () => {
   return photosArray.map((id) => `${PHOTOS_URL_BASE}hotel${id}.jpg)`);
 };
 
-const createRandomGenerator = (array) => {
+const createRandomItemGenerator = (array) => {
   const generatorArray = [...array];
   shuffleArray(generatorArray);
 
@@ -110,11 +110,11 @@ const createRandomGenerator = (array) => {
 };
 
 const createAvatarsGenerator = () => {
-  return createRandomGenerator(createAscendingArray(AVATARS_COUNT, 1))();
+  return createRandomItemGenerator(createAscendingArray(AVATARS_COUNT, 1))();
 };
 
 const createTitlesGenerator = () => {
-  return createRandomGenerator(TITLES_MOCK)();
+  return createRandomItemGenerator(TITLES_MOCK)();
 };
 
 const generateOffer = (
