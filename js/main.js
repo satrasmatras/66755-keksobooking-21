@@ -11,6 +11,13 @@ const TYPES = [
   `bungalow`
 ];
 
+const TYPES_TRANSLATIONS = {
+  'palace': `Дворец`,
+  'flat': `Квартира`,
+  'house': `Дом`,
+  'bungalow': `Бунгало`
+};
+
 const MAX_ROOMS = 10;
 
 const MAX_GUESTS = 15;
@@ -62,8 +69,8 @@ let maxLocationX = 630;
 const MIN_LOCATION_Y = 130;
 const MAX_LOCATION_Y = 630;
 
-const MIN_PHOTOS_COUNT = 3;
-const MAX_PHOTOS_COUNT = 7;
+const MIN_PHOTOS_COUNT = 1;
+const MAX_PHOTOS_COUNT = 3;
 
 const getElementWidth = (element) => {
   return element.clientWidth;
@@ -95,7 +102,7 @@ const shuffleArray = (array) => {
 const generateRandomPhotoArray = () => {
   const count = getRandomNumberInRange(MIN_PHOTOS_COUNT, MAX_PHOTOS_COUNT);
   const photosArray = createAscendingArray(count, 1);
-  return photosArray.map((id) => `${PHOTOS_URL_BASE}hotel${id}.jpg)`);
+  return photosArray.map((id) => `${PHOTOS_URL_BASE}hotel${id}.jpg`);
 };
 
 const createRandomItemGenerator = (array) => {
@@ -216,6 +223,119 @@ const renderPins = (pins) => {
   mapPins.append(fragment);
 };
 
+const getCardTemplate = () => {
+  return document
+    .querySelector(`#card`)
+    .content
+    .querySelector(`.popup`);
+};
+
+const getTypeTranslation = (type) => {
+  return TYPES_TRANSLATIONS.hasOwnProperty(type) ? TYPES_TRANSLATIONS[type] : null;
+};
+
+const createCardElement = (data) => {
+  const cardTemplate = getCardTemplate();
+  const cardElement = cardTemplate.cloneNode(true);
+
+  const {author, offer} = data;
+
+  if (offer.title) {
+    const title = cardElement.querySelector(`.popup__title`);
+    title.textContent = offer.title;
+  }
+
+  if (offer.address) {
+    const address = cardElement.querySelector(`.popup__text--address`);
+    address.textContent = offer.address;
+  }
+
+  if (offer.price) {
+    const price = cardElement.querySelector(`.popup__text--price`);
+    price.textContent = `${offer.price}₽/ночь`;
+  }
+
+  if (offer.type) {
+    const type = cardElement.querySelector(`.popup__type`);
+    type.textContent = getTypeTranslation(type);
+  }
+
+  const capacity = cardElement.querySelector(`.popup__text--capacity`);
+
+  if (offer.rooms) {
+    capacity.textContent = `${offer.rooms} комнаты`;
+    if (offer.guests) {
+      capacity.textContent += ` `;
+    }
+  }
+
+  if (offer.guests) {
+    capacity.textContent += `для ${offer.guests} гостей`;
+  }
+
+  const time = cardElement.querySelector(`.popup__text--time`);
+
+  if (offer.checkin) {
+    time.textContent = `Заезд после ${offer.checkin}`;
+
+    if (offer.checkout) {
+      time.textContent += `,  `;
+    }
+  }
+
+  if (offer.checkout) {
+    time.textContent += `выезд до ${offer.checkout}`;
+  }
+
+  if (offer.features) {
+    const features = cardElement.querySelector(`.popup__features`);
+    const featuresItems = features.children;
+
+    for (let i = 0; i < featuresItems.length; i++) {
+      const featureItem = featuresItems[i];
+      const featureClasses = featureItem.className;
+
+      if (offer.features.every((feature) => !featureClasses.includes(feature))) {
+        featureItem.remove();
+      }
+    }
+  }
+
+  if (offer.description) {
+    const description = cardElement.querySelector(`.popup__description`);
+    description.textContent = offer.description;
+  }
+
+  if (offer.photos) {
+    const photos = cardElement.querySelector(`.popup__photos`);
+    const photoElement = photos.querySelector(`.popup__photo`);
+
+    const photoElements = offer.photos.map((photo) => {
+      const newPhotoElement = photoElement.cloneNode(true);
+      newPhotoElement.src = photo;
+
+      return newPhotoElement;
+    });
+
+    photos.append(...photoElements);
+    photoElement.remove();
+  }
+
+  if (author.avatar) {
+    const avatar = cardElement.querySelector(`.popup__avatar`);
+    avatar.src = author.avatar;
+  }
+
+  return cardElement;
+};
+
+const renderCardElement = (cardElement) => {
+  const mapElement = document.querySelector(`.map`);
+  const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
+
+  mapElement.insertBefore(cardElement, mapFilterContainerElement);
+};
+
 const mapElement = document.querySelector(`.map`);
 maxLocationX = getElementWidth(mapElement);
 
@@ -225,3 +345,6 @@ mapElement.classList.remove(`map--faded`);
 
 const pinElements = generatePinElements(offers);
 renderPins(pinElements);
+
+const cardElement = createCardElement(offers[0]);
+renderCardElement(cardElement);
