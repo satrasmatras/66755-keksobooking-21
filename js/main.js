@@ -78,7 +78,7 @@ const getRandomItemFromArray = (array) => {
 };
 
 const getRandomItemsFromArray = (array) => {
-  return array.filter(() => Math.round(Math.random()));
+  return array.filter(() => getRandomNumberInRange(0, 1));
 };
 
 const createAscendingArray = (length, start = 0) => {
