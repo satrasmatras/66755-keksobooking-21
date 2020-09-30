@@ -235,8 +235,8 @@ const hideElement = (element) => {
   element.classList.add(HIDDEN_CLASS);
 };
 
-const fillFeatureElement = (featureElement, features) => {
-  const featuresItems = featureElement.children;
+const fillFeatureElement = (element, features) => {
+  const featuresItems = element.children;
 
   for (let i = 0; i < featuresItems.length; i++) {
     const featureItem = featuresItems[i];
