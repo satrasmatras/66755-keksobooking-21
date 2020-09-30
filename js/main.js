@@ -72,6 +72,8 @@ const MAX_LOCATION_Y = 630;
 const MIN_PHOTOS_COUNT = 1;
 const MAX_PHOTOS_COUNT = 3;
 
+const HIDDEN_CLASS = `hidden`;
+
 const getElementWidth = (element) => {
   return element.clientWidth;
 };
@@ -229,96 +231,110 @@ const getTypeTranslation = (type) => {
   return TYPES_TRANSLATIONS.hasOwnProperty(type) ? TYPES_TRANSLATIONS[type] : null;
 };
 
+const hideElement = (element) => {
+  element.classList.add(HIDDEN_CLASS);
+};
+
+const fillFeatureElement = (featureElement, features) => {
+  const featuresItems = featureElement.children;
+
+  for (let i = 0; i < featuresItems.length; i++) {
+    const featureItem = featuresItems[i];
+    const featureClasses = featureItem.className;
+
+    if (features.every((feature) => !featureClasses.includes(feature))) {
+      featureItem.remove();
+    }
+  }
+};
+
+const fillPhotosElement = (element, photos) => {
+  const photoElement = element.querySelector(`.popup__photo`);
+
+  const photoElements = photos.map((photo) => {
+    const newPhotoElement = photoElement.cloneNode(true);
+    newPhotoElement.src = photo;
+
+    return newPhotoElement;
+  });
+
+  photoElement.remove();
+  element.append(...photoElements);
+};
+
 const createCardElement = (data) => {
   const cardTemplate = getCardTemplate();
   const cardElement = cardTemplate.cloneNode(true);
-
   const {author, offer} = data;
 
+  const title = cardElement.querySelector(`.popup__title`);
   if (offer.title) {
-    const title = cardElement.querySelector(`.popup__title`);
     title.textContent = offer.title;
+  } else {
+    hideElement(title);
   }
 
+  const address = cardElement.querySelector(`.popup__text--address`);
   if (offer.address) {
-    const address = cardElement.querySelector(`.popup__text--address`);
     address.textContent = offer.address;
+  } else {
+    hideElement(address);
   }
 
+  const price = cardElement.querySelector(`.popup__text--price`);
   if (offer.price) {
-    const price = cardElement.querySelector(`.popup__text--price`);
     price.textContent = `${offer.price}₽/ночь`;
+  } else {
+    hideElement(price);
   }
 
+  const type = cardElement.querySelector(`.popup__type`);
   if (offer.type) {
-    const type = cardElement.querySelector(`.popup__type`);
     type.textContent = getTypeTranslation(type);
+  } else {
+    hideElement(type);
   }
 
   const capacity = cardElement.querySelector(`.popup__text--capacity`);
-
-  if (offer.rooms) {
-    capacity.textContent = `${offer.rooms} комнаты`;
-    if (offer.guests) {
-      capacity.textContent += ` `;
-    }
-  }
-
-  if (offer.guests) {
-    capacity.textContent += `для ${offer.guests} гостей`;
+  if (offer.rooms && offer.guests) {
+    capacity.textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
+  } else {
+    hideElement(type);
   }
 
   const time = cardElement.querySelector(`.popup__text--time`);
-
-  if (offer.checkin) {
-    time.textContent = `Заезд после ${offer.checkin}`;
-
-    if (offer.checkout) {
-      time.textContent += `,  `;
-    }
+  if (offer.checkin && offer.checkout) {
+    time.textContent = `Заезд после ${offer.checkin},  выезд до ${offer.checkout}`;
+  } else {
+    hideElement(time);
   }
 
-  if (offer.checkout) {
-    time.textContent += `выезд до ${offer.checkout}`;
-  }
-
+  const features = cardElement.querySelector(`.popup__features`);
   if (offer.features) {
-    const features = cardElement.querySelector(`.popup__features`);
-    const featuresItems = features.children;
-
-    for (let i = 0; i < featuresItems.length; i++) {
-      const featureItem = featuresItems[i];
-      const featureClasses = featureItem.className;
-
-      if (offer.features.every((feature) => !featureClasses.includes(feature))) {
-        featureItem.remove();
-      }
-    }
+    fillFeatureElement(features, offer.features);
+  } else {
+    hideElement(features);
   }
 
+  const description = cardElement.querySelector(`.popup__description`);
   if (offer.description) {
-    const description = cardElement.querySelector(`.popup__description`);
     description.textContent = offer.description;
+  } else {
+    hideElement(description);
   }
 
+  const photos = cardElement.querySelector(`.popup__photos`);
   if (offer.photos) {
-    const photos = cardElement.querySelector(`.popup__photos`);
-    const photoElement = photos.querySelector(`.popup__photo`);
-
-    const photoElements = offer.photos.map((photo) => {
-      const newPhotoElement = photoElement.cloneNode(true);
-      newPhotoElement.src = photo;
-
-      return newPhotoElement;
-    });
-
-    photos.append(...photoElements);
-    photoElement.remove();
+    fillPhotosElement(photos, offer.photos);
+  } else {
+    hideElement(photos);
   }
 
+  const avatar = cardElement.querySelector(`.popup__avatar`);
   if (author.avatar) {
-    const avatar = cardElement.querySelector(`.popup__avatar`);
     avatar.src = author.avatar;
+  } else {
+    hideElement(avatar);
   }
 
   return cardElement;
