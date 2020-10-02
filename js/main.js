@@ -1,6 +1,6 @@
 'use strict';
 
-const OFFERS_COUNT = 8;
+const ADS_COUNT = 8;
 
 const TYPES = [
   `palace`,
@@ -56,8 +56,8 @@ const DESCRIPTIONS_MOCK = [
   `Минималистичная квартира для людей, заботящихся о своем пространстве`
 ];
 
-const MIN_OFFER_PRICE = 10000;
-const MAX_OFFER_PRICE = 100000000;
+const MIN_AD_PRICE = 10000;
+const MAX_AD_PRICE = 100000000;
 
 const MIN_LOCATION_X = 0;
 const MAX_LOCATION_X = 1200;
@@ -93,14 +93,14 @@ const generateRandomPhotoArray = () => {
   return PHOTOS_MOCK.slice(0, getRandomNumberInRange(1, MAX_PHOTOS_COUNT));
 };
 
-const generateOffer = (index) => {
+const generateAd = (index) => {
   const avatar = `img/avatars/user0${index + 1}.png`;
   const title = TITLES_MOCK[index];
   const location = [
     getRandomNumberInRange(MIN_LOCATION_X, MAX_LOCATION_X),
     getRandomNumberInRange(MIN_LOCATION_Y, MAX_LOCATION_Y)
   ];
-  const price = getRandomNumberInRange(MIN_OFFER_PRICE, MAX_OFFER_PRICE);
+  const price = getRandomNumberInRange(MIN_AD_PRICE, MAX_AD_PRICE);
   const type = getRandomItemFromArray(TYPES);
   const rooms = getRandomNumberInRange(1, MAX_ROOMS);
   const guests = getRandomNumberInRange(1, MAX_GUESTS);
@@ -134,15 +134,15 @@ const generateOffer = (index) => {
   };
 };
 
-const generateOffers = (count) => {
-  const offers = [];
+const generateAds = (count) => {
+  const ads = [];
 
   for (let i = 0; i < count; i++) {
-    const offer = generateOffer(i);
-    offers.push(offer);
+    const ad = generateAd(i);
+    ads.push(ad);
   }
 
-  return offers;
+  return ads;
 };
 
 const getPinTemplate = () => {
@@ -152,25 +152,25 @@ const getPinTemplate = () => {
     .querySelector(`.map__pin`);
 };
 
-const generatePinElement = (pinTemplate, offer) => {
+const generatePinElement = (pinTemplate, ad) => {
   const pinElement = pinTemplate.cloneNode(true);
-  pinElement.style.left = `${offer.location.x - getElementWidth(pinElement) / 2}px`;
-  pinElement.style.top = `${offer.location.y - getElementWidth(pinElement) / 2}px`;
+  pinElement.style.left = `${ad.location.x - getElementWidth(pinElement) / 2}px`;
+  pinElement.style.top = `${ad.location.y - getElementWidth(pinElement) / 2}px`;
 
   const pinImage = pinElement.querySelector(`img`);
-  pinImage.src = offer.author.avatar;
-  pinImage.alt = offer.offer.title;
+  pinImage.src = ad.author.avatar;
+  pinImage.alt = ad.offer.title;
 
   return pinElement;
 };
 
-const renderPinElements = (pinTemplate, offers) => {
+const renderPinElements = (pinTemplate, ads) => {
   const fragment = document.createDocumentFragment();
   const mapPins = document.querySelector(`.map__pins`);
   const pinElements = [];
 
-  offers.forEach((offer) => {
-    const pinElement = generatePinElement(pinTemplate, offer);
+  ads.forEach((ad) => {
+    const pinElement = generatePinElement(pinTemplate, ad);
     pinElements.push(pinElement);
   });
 
@@ -220,9 +220,9 @@ const fillPhotosElement = (element, photos) => {
   element.append(...photoElements);
 };
 
-const createCardElement = (cardTemplate, data) => {
+const createCardElement = (cardTemplate, ad) => {
   const cardElement = cardTemplate.cloneNode(true);
-  const {author, offer} = data;
+  const {author, offer} = ad;
 
   const title = cardElement.querySelector(`.popup__title`);
   if (offer.title) {
@@ -304,13 +304,13 @@ const renderCardElement = (mapElement, mapFilterContainerElement, cardElement) =
 const mapElement = document.querySelector(`.map`);
 const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
 
-const offers = generateOffers(OFFERS_COUNT);
+const ads = generateAds(ADS_COUNT);
 
 mapElement.classList.remove(`map--faded`);
 
 const pinTemplate = getPinTemplate();
-renderPinElements(pinTemplate, offers);
+renderPinElements(pinTemplate, ads);
 
 const cardTemplate = getCardTemplate();
-const cardElement = createCardElement(cardTemplate, offers[0]);
+const cardElement = createCardElement(cardTemplate, ads[0]);
 renderCardElement(mapElement, mapFilterContainerElement, cardElement);
