@@ -64,7 +64,7 @@ const MIN_OFFER_PRICE = 10000;
 const MAX_OFFER_PRICE = 100000000;
 
 const MIN_LOCATION_X = 0;
-let maxLocationX = 630;
+const MAX_LOCATION_X = 1200;
 
 const MIN_LOCATION_Y = 130;
 const MAX_LOCATION_Y = 630;
@@ -135,7 +135,7 @@ const generateOffer = (
   const avatarId = avatarGenerator.next().value;
   const title = titleGenerator.next().value;
   const location = [
-    getRandomNumberInRange(MIN_LOCATION_X, maxLocationX),
+    getRandomNumberInRange(MIN_LOCATION_X, MAX_LOCATION_X),
     getRandomNumberInRange(MIN_LOCATION_Y, MAX_LOCATION_Y)
   ];
   const price = getRandomNumberInRange(MIN_OFFER_PRICE, MAX_OFFER_PRICE);
@@ -348,7 +348,6 @@ const renderCardElement = (cardElement) => {
 };
 
 const mapElement = document.querySelector(`.map`);
-maxLocationX = getElementWidth(mapElement);
 
 const offers = generateOffers(OFFERS_COUNT);
 
