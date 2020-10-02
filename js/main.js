@@ -2,8 +2,6 @@
 
 const OFFERS_COUNT = 8;
 
-const AVATARS_COUNT = 8;
-
 const TYPES = [
   `palace`,
   `flat`,
@@ -107,33 +105,9 @@ const generateRandomPhotoArray = () => {
   return photosArray.map((id) => `${PHOTOS_URL_BASE}hotel${id}.jpg`);
 };
 
-const createRandomItemGenerator = (array) => {
-  const generatorArray = [...array];
-  shuffleArray(generatorArray);
-
-  return function* () {
-    for (let i = 0; i < generatorArray.length; i++) {
-      yield generatorArray[i];
-    }
-  };
-};
-
-const createAvatarsGenerator = () => {
-  return createRandomItemGenerator(createAscendingArray(AVATARS_COUNT, 1))();
-};
-
-const createTitlesGenerator = () => {
-  return createRandomItemGenerator(TITLES_MOCK)();
-};
-
-const generateOffer = (
-    {
-      avatarGenerator = createAvatarsGenerator(),
-      titleGenerator = createTitlesGenerator()
-    }
-) => {
-  const avatarId = avatarGenerator.next().value;
-  const title = titleGenerator.next().value;
+const generateOffer = (index) => {
+  const avatar = `img/avatars/user0${index + 1}.png`;
+  const title = TITLES_MOCK[index];
   const location = [
     getRandomNumberInRange(MIN_LOCATION_X, MAX_LOCATION_X),
     getRandomNumberInRange(MIN_LOCATION_Y, MAX_LOCATION_Y)
@@ -150,7 +124,7 @@ const generateOffer = (
 
   return {
     author: {
-      avatar: `img/avatars/user0${avatarId}.png`
+      avatar
     },
     offer: {
       title,
@@ -173,12 +147,10 @@ const generateOffer = (
 };
 
 const generateOffers = (count) => {
-  const avatarGenerator = createAvatarsGenerator();
-  const titleGenerator = createTitlesGenerator();
   const offers = [];
 
   for (let i = 0; i < count; i++) {
-    const offer = generateOffer({avatarGenerator, titleGenerator});
+    const offer = generateOffer(i);
     offers.push(offer);
   }
 
