@@ -35,8 +35,6 @@ const FEATURES = [
   `conditioner`
 ];
 
-const PHOTOS_URL_BASE = `http://o0.github.io/assets/images/tokyo/`;
-
 const TITLES_MOCK = [
   `Отличная квартира!`,
   `Сдам срочно!`,
@@ -67,8 +65,13 @@ const MAX_LOCATION_X = 1200;
 const MIN_LOCATION_Y = 130;
 const MAX_LOCATION_Y = 630;
 
-const MIN_PHOTOS_COUNT = 1;
 const MAX_PHOTOS_COUNT = 3;
+
+const PHOTOS_MOCK = [
+  `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
+  `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
+  `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
+];
 
 const getElementWidth = (element) => {
   return element.clientWidth;
@@ -86,14 +89,8 @@ const getRandomItemsFromArray = (array) => {
   return array.filter(() => getRandomNumberInRange(0, 1));
 };
 
-const createAscendingArray = (length, start = 0) => {
-  return Array.from(Array(length).keys()).map((id) => id + start);
-};
-
 const generateRandomPhotoArray = () => {
-  const count = getRandomNumberInRange(MIN_PHOTOS_COUNT, MAX_PHOTOS_COUNT);
-  const photoIds = createAscendingArray(count, 1);
-  return photoIds.map((id) => `${PHOTOS_URL_BASE}hotel${id}.jpg`);
+  return PHOTOS_MOCK.slice(0, getRandomNumberInRange(1, MAX_PHOTOS_COUNT));
 };
 
 const generateOffer = (index) => {
