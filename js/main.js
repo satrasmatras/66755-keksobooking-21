@@ -225,8 +225,7 @@ const fillPhotosElement = (element, photos) => {
   element.append(...photoElements);
 };
 
-const createCardElement = (data) => {
-  const cardTemplate = getCardTemplate();
+const createCardElement = (cardTemplate, data) => {
   const cardElement = cardTemplate.cloneNode(true);
   const {author, offer} = data;
 
@@ -303,14 +302,12 @@ const createCardElement = (data) => {
   return cardElement;
 };
 
-const renderCardElement = (cardElement) => {
-  const mapElement = document.querySelector(`.map`);
-  const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
-
+const renderCardElement = (mapElement, mapFilterContainerElement, cardElement) => {
   mapElement.insertBefore(cardElement, mapFilterContainerElement);
 };
 
 const mapElement = document.querySelector(`.map`);
+const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
 
 const offers = generateOffers(OFFERS_COUNT);
 
@@ -318,5 +315,8 @@ mapElement.classList.remove(`map--faded`);
 
 renderPinElements(offers);
 
-const cardElement = createCardElement(offers[0]);
-renderCardElement(cardElement);
+const cardTemplate = getCardTemplate();
+const cardElement = createCardElement(cardTemplate, offers[0]);
+
+
+renderCardElement(mapElement, mapFilterContainerElement, cardElement);
