@@ -317,6 +317,4 @@ renderPinElements(offers);
 
 const cardTemplate = getCardTemplate();
 const cardElement = createCardElement(cardTemplate, offers[0]);
-
-
 renderCardElement(mapElement, mapFilterContainerElement, cardElement);
