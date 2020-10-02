@@ -92,13 +92,6 @@ const createAscendingArray = (length, start = 0) => {
   return Array.from(Array(length).keys()).map((id) => id + start);
 };
 
-const shuffleArray = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-};
-
 const generateRandomPhotoArray = () => {
   const count = getRandomNumberInRange(MIN_PHOTOS_COUNT, MAX_PHOTOS_COUNT);
   const photosArray = createAscendingArray(count, 1);
