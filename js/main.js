@@ -155,9 +155,7 @@ const getPinTemplate = () => {
     .querySelector(`.map__pin`);
 };
 
-const generatePinElement = (offer) => {
-  const pinTemplate = getPinTemplate();
-
+const generatePinElement = (pinTemplate, offer) => {
   const pinElement = pinTemplate.cloneNode(true);
   pinElement.style.left = `${offer.location.x - getElementWidth(pinElement) / 2}px`;
   pinElement.style.top = `${offer.location.y - getElementWidth(pinElement) / 2}px`;
@@ -169,13 +167,13 @@ const generatePinElement = (offer) => {
   return pinElement;
 };
 
-const renderPinElements = (offers) => {
+const renderPinElements = (pinTemplate, offers) => {
   const fragment = document.createDocumentFragment();
   const mapPins = document.querySelector(`.map__pins`);
   const pinElements = [];
 
   offers.forEach((offer) => {
-    const pinElement = generatePinElement(offer);
+    const pinElement = generatePinElement(pinTemplate, offer);
     pinElements.push(pinElement);
   });
 
@@ -313,7 +311,8 @@ const offers = generateOffers(OFFERS_COUNT);
 
 mapElement.classList.remove(`map--faded`);
 
-renderPinElements(offers);
+const pinTemplate = getPinTemplate();
+renderPinElements(pinTemplate, offers);
 
 const cardTemplate = getCardTemplate();
 const cardElement = createCardElement(cardTemplate, offers[0]);
