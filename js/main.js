@@ -92,8 +92,8 @@ const createAscendingArray = (length, start = 0) => {
 
 const generateRandomPhotoArray = () => {
   const count = getRandomNumberInRange(MIN_PHOTOS_COUNT, MAX_PHOTOS_COUNT);
-  const photos = createAscendingArray(count, 1);
-  return photos.map((id) => `${PHOTOS_URL_BASE}hotel${id}.jpg`);
+  const photoIds = createAscendingArray(count, 1);
+  return photoIds.map((id) => `${PHOTOS_URL_BASE}hotel${id}.jpg`);
 };
 
 const generateOffer = (index) => {
