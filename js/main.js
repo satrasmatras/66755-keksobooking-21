@@ -67,15 +67,16 @@ const MAX_LOCATION_Y = 630;
 
 const MAX_PHOTOS_COUNT = 3;
 
+const Pin = {
+  WIDTH: 50,
+  HEIGHT: 70
+};
+
 const PHOTOS_MOCK = [
   `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
   `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
 ];
-
-const getElementWidth = (element) => {
-  return element.clientWidth;
-};
 
 const getRandomNumberInRange = (min, max) => {
   return Math.round(Math.random() * (max - min)) + min;
@@ -154,8 +155,9 @@ const getPinTemplate = () => {
 
 const generatePinElement = (pinTemplate, ad) => {
   const pinElement = pinTemplate.cloneNode(true);
-  pinElement.style.left = `${ad.location.x - getElementWidth(pinElement) / 2}px`;
-  pinElement.style.top = `${ad.location.y - getElementWidth(pinElement) / 2}px`;
+
+  pinElement.style.left = `${ad.location.x - Pin.WIDTH / 2}px`;
+  pinElement.style.top = `${ad.location.y - Pin.HEIGHT}px`;
 
   const pinImage = pinElement.querySelector(`img`);
   pinImage.src = ad.author.avatar;
