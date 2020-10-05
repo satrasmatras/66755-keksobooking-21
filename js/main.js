@@ -187,10 +187,6 @@ const getCardTemplate = () => {
     .querySelector(`.popup`);
 };
 
-const removeElement = (element) => {
-  element.remove();
-};
-
 const fillFeatureElement = (element, features) => {
   const featuresItems = element.children;
 
@@ -226,70 +222,70 @@ const createCardElement = (cardTemplate, ad) => {
   if (offer.title) {
     title.textContent = offer.title;
   } else {
-    removeElement(title);
+    title.remove();
   }
 
   const address = cardElement.querySelector(`.popup__text--address`);
   if (offer.address) {
     address.textContent = offer.address;
   } else {
-    removeElement(address);
+    address.remove();
   }
 
   const price = cardElement.querySelector(`.popup__text--price`);
   if (offer.price) {
     price.textContent = `${offer.price}₽/ночь`;
   } else {
-    removeElement(price);
+    price.remove();
   }
 
   const type = cardElement.querySelector(`.popup__type`);
   if (offer.type) {
     type.textContent = TYPES_KEYS[offer.type];
   } else {
-    removeElement(type);
+    type.remove();
   }
 
   const capacity = cardElement.querySelector(`.popup__text--capacity`);
   if (offer.rooms && offer.guests) {
     capacity.textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
   } else {
-    removeElement(type);
+    capacity.remove();
   }
 
   const time = cardElement.querySelector(`.popup__text--time`);
   if (offer.checkin && offer.checkout) {
     time.textContent = `Заезд после ${offer.checkin},  выезд до ${offer.checkout}`;
   } else {
-    removeElement(time);
+    time.remove();
   }
 
   const features = cardElement.querySelector(`.popup__features`);
   if (offer.features) {
     fillFeatureElement(features, offer.features);
   } else {
-    removeElement(features);
+    features.remove();
   }
 
   const description = cardElement.querySelector(`.popup__description`);
   if (offer.description) {
     description.textContent = offer.description;
   } else {
-    removeElement(description);
+    description.remove();
   }
 
   const photos = cardElement.querySelector(`.popup__photos`);
   if (offer.photos) {
     fillPhotosElement(photos, offer.photos);
   } else {
-    removeElement(photos);
+    photos.remove();
   }
 
   const avatar = cardElement.querySelector(`.popup__avatar`);
   if (author.avatar) {
     avatar.src = author.avatar;
   } else {
-    removeElement(avatar);
+    avatar.remove();
   }
 
   return cardElement;
