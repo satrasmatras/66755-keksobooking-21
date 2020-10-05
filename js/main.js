@@ -9,7 +9,7 @@ const TYPES = [
   `bungalow`
 ];
 
-const TYPES_TRANSLATIONS = {
+const TYPES_KEYS = {
   'palace': `Дворец`,
   'flat': `Квартира`,
   'house': `Дом`,
@@ -187,10 +187,6 @@ const getCardTemplate = () => {
     .querySelector(`.popup`);
 };
 
-const getTypeTranslation = (type) => {
-  return TYPES_TRANSLATIONS.hasOwnProperty(type) ? TYPES_TRANSLATIONS[type] : null;
-};
-
 const removeElement = (element) => {
   element.remove();
 };
@@ -249,7 +245,7 @@ const createCardElement = (cardTemplate, ad) => {
 
   const type = cardElement.querySelector(`.popup__type`);
   if (offer.type) {
-    type.textContent = getTypeTranslation(type);
+    type.textContent = TYPES_KEYS[offer.type];
   } else {
     removeElement(type);
   }
