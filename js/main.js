@@ -214,7 +214,7 @@ const fillPhotosElement = (element, photos) => {
   element.append(...photoElements);
 };
 
-const createCardElement = (cardTemplate, ad) => {
+const createCardElement = (ad) => {
   const cardElement = cardTemplate.cloneNode(true);
   const {author, offer} = ad;
 
