@@ -296,15 +296,125 @@ const renderCardElement = (mapElement, mapFilterContainerElement, cardElement) =
 };
 
 const mapElement = document.querySelector(`.map`);
+const mapFiltersElement = mapElement.querySelector(`.map__filters`);
 const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
 
-const ads = generateAds(ADS_COUNT);
+const adForm = document.querySelector(`.ad-form`);
+const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
 
-mapElement.classList.remove(`map--faded`);
+const mainPin = mapElement.querySelector(`.map__pin--main`);
 
-const pinTemplate = getPinTemplate();
-renderPinElements(pinTemplate, ads);
+const addressInput = adForm.querySelector(`#address`);
 
+let pageIsActive = false;
+
+const setPageActive = () => {
+  pageIsActive = true;
+  mapElement.classList.remove(`map--faded`);
+  adForm.classList.remove(`ad-form--disabled`);
+  mapFiltersElement.classList.remove(`map__filters--disabled`);
+  adFormFieldsets.forEach((fieldset) => {
+    fieldset.disabled = false;
+  });
+};
+
+const setPageInactive = () => {
+  pageIsActive = false;
+  mapElement.classList.add(`map--faded`);
+  adForm.classList.add(`ad-form--disabled`);
+  mapFiltersElement.classList.add(`map__filters--disabled`);
+  adFormFieldsets.forEach((fieldset) => {
+    fieldset.disabled = true;
+  });
+};
+
+const MainPinPointer = {
+  WIDTH: 10,
+  HEIGHT: 22
+};
+
+const getMainPinCoords = () => {
+  const {left, top} = getComputedStyle(mainPin);
+  const {offsetWidth, offsetHeight} = mainPin;
+
+  const pinLocationX = parseInt(left, 10) + offsetWidth / 2;
+  const pinLocationY = parseInt(top, 10) + offsetHeight + MainPinPointer.HEIGHT;
+
+  return [pinLocationX, pinLocationY];
+};
+
+const updateAddressInput = () => {
+  const [x, y] = getMainPinCoords();
+  addressInput.value = `${x}, ${y}`;
+};
+
+const onMainPinMousedown = (event) => {
+  if (event.button === 0 && !pageIsActive) {
+    setPageActive();
+    updateAddressInput();
+  }
+};
+
+const onMainPinEnterPressed = (event) => {
+  if (event.key === `Enter` && !pageIsActive) {
+    setPageActive();
+    updateAddressInput();
+  }
+};
+
+const roomsSelect = adForm.querySelector(`#room_number`);
+const guestsSelect = adForm.querySelector(`#capacity`);
+
+const guestsSelectIsValid = () => {
+  const roomsCount = parseInt(roomsSelect.value, 10);
+  const guestsCount = parseInt(guestsSelect.value, 10);
+
+  if (roomsCount === 100 && guestsCount === 0) {
+    return true;
+  } else if (roomsCount < 100 && guestsCount <= roomsCount) {
+    return true;
+  }
+
+  return false;
+};
+
+const setAndReportGuestsSelectValidity = () => {
+  const guestsCustomValidityValue = guestsSelectIsValid() ? `` : `Вы не можете выбрать такое количество гостей`;
+
+  guestsSelect.setCustomValidity(guestsCustomValidityValue);
+  guestsSelect.reportValidity();
+};
+
+const onRoomsSelectChange = () => {
+  setAndReportGuestsSelectValidity();
+};
+
+const onGuestsSelectChange = () => {
+  setAndReportGuestsSelectValidity();
+};
+
+roomsSelect.addEventListener(`change`, onRoomsSelectChange);
+guestsSelect.addEventListener(`change`, onGuestsSelectChange);
+
+const onAdFormSubmit = (event) => {
+  setAndReportGuestsSelectValidity();
+  if (!adForm.reportValidity()) {
+    event.preventDefault();
+  }
+};
+
+adForm.addEventListener(`submit`, onAdFormSubmit);
+
+setPageInactive();
+updateAddressInput();
+
+mainPin.addEventListener(`mousedown`, onMainPinMousedown);
+mainPin.addEventListener(`keydown`, onMainPinEnterPressed);
+
+// const ads = generateAds(ADS_COUNT);
+// const pinTemplate = getPinTemplate();
+// renderPinElements(pinTemplate, ads);
+//
 const cardTemplate = getCardTemplate();
-const cardElement = createCardElement(cardTemplate, ads[0]);
-renderCardElement(mapElement, mapFilterContainerElement, cardElement);
+// const cardElement = createCardElement(ads[0]);
+// renderCardElement(mapElement, mapFilterContainerElement, cardElement);
