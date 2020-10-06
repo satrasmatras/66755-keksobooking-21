@@ -9,7 +9,7 @@ const TYPES = [
   `bungalow`
 ];
 
-const TYPES_KEYS = {
+const ROOM_TYPE_KEYS = {
   'palace': `Дворец`,
   'flat': `Квартира`,
   'house': `Дом`,
@@ -241,7 +241,7 @@ const createCardElement = (cardTemplate, ad) => {
 
   const type = cardElement.querySelector(`.popup__type`);
   if (offer.type) {
-    type.textContent = TYPES_KEYS[offer.type];
+    type.textContent = ROOM_TYPE_KEYS[offer.type];
   } else {
     type.remove();
   }
