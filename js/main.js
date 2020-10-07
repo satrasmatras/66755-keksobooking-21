@@ -153,7 +153,7 @@ const getPinTemplate = () => {
     .querySelector(`.map__pin`);
 };
 
-const generatePinElement = (pinTemplate, ad) => {
+const generatePinElement = (ad) => {
   const pinElement = pinTemplate.cloneNode(true);
 
   pinElement.style.left = `${ad.location.x - Pin.WIDTH / 2}px`;
@@ -166,7 +166,7 @@ const generatePinElement = (pinTemplate, ad) => {
   return pinElement;
 };
 
-const renderPinElements = (pinTemplate, ads) => {
+const renderPinElements = (ads) => {
   const fragment = document.createDocumentFragment();
   const mapPins = document.querySelector(`.map__pins`);
   const pinElements = [];
