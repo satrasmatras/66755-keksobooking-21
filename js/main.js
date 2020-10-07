@@ -306,26 +306,28 @@ const mainPin = mapElement.querySelector(`.map__pin--main`);
 
 const addressInput = adForm.querySelector(`#address`);
 
-let pageIsActive = false;
-
 const setPageActive = () => {
-  pageIsActive = true;
   mapElement.classList.remove(`map--faded`);
   adForm.classList.remove(`ad-form--disabled`);
   mapFiltersElement.classList.remove(`map__filters--disabled`);
   adFormFieldsets.forEach((fieldset) => {
     fieldset.disabled = false;
   });
+
+  removeMainPinListeners();
+  showPins();
 };
 
 const setPageInactive = () => {
-  pageIsActive = false;
   mapElement.classList.add(`map--faded`);
   adForm.classList.add(`ad-form--disabled`);
   mapFiltersElement.classList.add(`map__filters--disabled`);
   adFormFieldsets.forEach((fieldset) => {
     fieldset.disabled = true;
   });
+
+  addMainPinListeners();
+  clearPins();
 };
 
 const MainPinPointer = {
@@ -348,15 +350,25 @@ const updateAddressInput = () => {
   addressInput.value = `${x}, ${y}`;
 };
 
+const addMainPinListeners = () => {
+  mainPin.addEventListener(`mousedown`, onMainPinMousedown);
+  mainPin.addEventListener(`keydown`, onMainPinEnterPressed);
+};
+
+const removeMainPinListeners = () => {
+  mainPin.removeEventListener(`mousedown`, onMainPinMousedown);
+  mainPin.removeEventListener(`keydown`, onMainPinEnterPressed);
+};
+
 const onMainPinMousedown = (event) => {
-  if (event.button === 0 && !pageIsActive) {
+  if (event.button === 0) {
     setPageActive();
     updateAddressInput();
   }
 };
 
 const onMainPinEnterPressed = (event) => {
-  if (event.key === `Enter` && !pageIsActive) {
+  if (event.key === `Enter`) {
     setPageActive();
     updateAddressInput();
   }
@@ -404,6 +416,18 @@ const onAdFormSubmit = (event) => {
 };
 
 adForm.addEventListener(`submit`, onAdFormSubmit);
+
+const showPins = () => {
+  const ads = generateAds(ADS_COUNT);
+  renderPinElements(ads);
+};
+
+const clearPins = () => {
+  const pins = mapElement.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+  pins.forEach((pin) => {
+    pin.remove();
+  });
+};
 
 setPageInactive();
 updateAddressInput();
