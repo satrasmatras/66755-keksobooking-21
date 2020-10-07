@@ -383,7 +383,9 @@ const guestsSelectIsValid = () => {
 
   if (roomsCount === 100 && guestsCount === 0) {
     return true;
-  } else if (roomsCount < 100 && guestsCount <= roomsCount) {
+  }
+
+  if (roomsCount < 100 && guestsCount <= roomsCount) {
     return true;
   }
 
