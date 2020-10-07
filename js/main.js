@@ -172,7 +172,7 @@ const renderPinElements = (ads) => {
   const pinElements = [];
 
   ads.forEach((ad) => {
-    const pinElement = generatePinElement(pinTemplate, ad);
+    const pinElement = generatePinElement(ad);
     pinElements.push(pinElement);
   });
 
@@ -408,12 +408,7 @@ adForm.addEventListener(`submit`, onAdFormSubmit);
 setPageInactive();
 updateAddressInput();
 
-mainPin.addEventListener(`mousedown`, onMainPinMousedown);
-mainPin.addEventListener(`keydown`, onMainPinEnterPressed);
-
-// const ads = generateAds(ADS_COUNT);
-// const pinTemplate = getPinTemplate();
-// renderPinElements(pinTemplate, ads);
+const pinTemplate = getPinTemplate();
 //
 const cardTemplate = getCardTemplate();
 // const cardElement = createCardElement(ads[0]);
