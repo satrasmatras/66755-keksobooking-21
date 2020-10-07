@@ -297,7 +297,7 @@ const renderPinElements = (ads) => {
 
 const mapElement = document.querySelector(`.map`);
 const mapFiltersElement = mapElement.querySelector(`.map__filters`);
-const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
+// const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
 
 const adForm = document.querySelector(`.ad-form`);
 const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
