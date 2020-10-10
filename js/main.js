@@ -355,9 +355,9 @@ const renderCardElement = (ad) => {
 
   if (previousCardElement) {
     mapElement.replaceChild(cardElement, previousCardElement);
+  } else {
+    mapElement.insertBefore(cardElement, mapFilterContainerElement);
   }
-
-  mapElement.insertBefore(cardElement, mapFilterContainerElement);
 };
 
 const mapElement = document.querySelector(`.map`);
