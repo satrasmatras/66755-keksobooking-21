@@ -16,6 +16,13 @@ const ROOM_TYPE_KEYS = {
   'bungalow': `Бунгало`
 };
 
+const TYPE_MIN_PRICE_MAP = {
+  "bungalow": 0,
+  "flat": 1000,
+  "house": 5000,
+  "palace": 10000
+};
+
 const MAX_ROOMS = 10;
 
 const MAX_GUESTS = 15;
@@ -187,7 +194,6 @@ const generatePinElement = (ad) => {
 
 const renderPinElements = (ads) => {
   const fragment = document.createDocumentFragment();
-  const mapPins = document.querySelector(`.map__pins`);
   const pinElements = [];
 
   ads.forEach((ad) => {
@@ -196,7 +202,7 @@ const renderPinElements = (ads) => {
   });
 
   fragment.append(...pinElements);
-  mapPins.append(fragment);
+  mapPinsElement.append(fragment);
 };
 
 const getCardTemplate = () => {
@@ -238,6 +244,7 @@ const isMainClick = (event) => {
 };
 
 const isEscapeKey = (event) => event.key === `Escape`;
+
 const isEnterKey = (event) => event.key === `Enter`;
 
 const createCardElement = (ad) => {
@@ -356,19 +363,50 @@ const renderCardElement = (ad) => {
 const mapElement = document.querySelector(`.map`);
 const mapFiltersElement = mapElement.querySelector(`.map__filters`);
 const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
+const mapPinsElement = document.querySelector(`.map__pins`);
 
-const adForm = document.querySelector(`.ad-form`);
-const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
+const adFormElement = document.querySelector(`.ad-form`);
+const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
 
-const mainPin = mapElement.querySelector(`.map__pin--main`);
+const mainPinElement = mapElement.querySelector(`.map__pin--main`);
 
-const addressInput = adForm.querySelector(`#address`);
+const addressInputElement = adFormElement.querySelector(`#address`);
+const priceInputElement = adFormElement.querySelector(`#price`);
+const houseTypeSelectElement = adFormElement.querySelector(`#type`);
+
+const timeinSelectElement = adFormElement.querySelector(`#timein`);
+const timeoutSelectElement = adFormElement.querySelector(`#timeout`);
+
+const onTimeinSelectChanged = (event) => {
+  timeoutSelectElement.value = event.target.value;
+};
+
+const onTimeoutSelectChanged = (event) => {
+  timeinSelectElement.value = event.target.value;
+};
+
+timeinSelectElement.addEventListener(`change`, onTimeinSelectChanged);
+timeoutSelectElement.addEventListener(`change`, onTimeoutSelectChanged);
+
+const onHouseTypeSelectElement = () => {
+  updatePriceAttrsByHouseTypeSelectValue();
+};
+
+const updatePriceAttrsByHouseTypeSelectValue = () => {
+  const selectedType = houseTypeSelectElement.value;
+  const newMinPrice = TYPE_MIN_PRICE_MAP[selectedType];
+
+  priceInputElement.min = newMinPrice;
+  priceInputElement.placeholder = newMinPrice;
+};
+
+houseTypeSelectElement.addEventListener(`change`, onHouseTypeSelectElement);
 
 const setPageActive = () => {
   mapElement.classList.remove(`map--faded`);
-  adForm.classList.remove(`ad-form--disabled`);
+  adFormElement.classList.remove(`ad-form--disabled`);
   mapFiltersElement.classList.remove(`map__filters--disabled`);
-  adFormFieldsets.forEach((fieldset) => {
+  adFormFieldsetElements.forEach((fieldset) => {
     fieldset.disabled = false;
   });
 
@@ -378,9 +416,9 @@ const setPageActive = () => {
 
 const setPageInactive = () => {
   mapElement.classList.add(`map--faded`);
-  adForm.classList.add(`ad-form--disabled`);
+  adFormElement.classList.add(`ad-form--disabled`);
   mapFiltersElement.classList.add(`map__filters--disabled`);
-  adFormFieldsets.forEach((fieldset) => {
+  adFormFieldsetElements.forEach((fieldset) => {
     fieldset.disabled = true;
   });
 
@@ -394,8 +432,8 @@ const MainPinPointer = {
 };
 
 const getMainPinCoords = () => {
-  const {left, top} = getComputedStyle(mainPin);
-  const {offsetWidth, offsetHeight} = mainPin;
+  const {left, top} = getComputedStyle(mainPinElement);
+  const {offsetWidth, offsetHeight} = mainPinElement;
 
   const pinLocationX = parseInt(left, 10) + offsetWidth / 2;
   const pinLocationY = parseInt(top, 10) + offsetHeight + MainPinPointer.HEIGHT;
@@ -405,17 +443,17 @@ const getMainPinCoords = () => {
 
 const updateAddressInput = () => {
   const [x, y] = getMainPinCoords();
-  addressInput.value = `${x}, ${y}`;
+  addressInputElement.value = `${x}, ${y}`;
 };
 
 const addMainPinListeners = () => {
-  mainPin.addEventListener(`mousedown`, onMainPinMousedown);
-  mainPin.addEventListener(`keydown`, onMainPinEnterPressed);
+  mainPinElement.addEventListener(`mousedown`, onMainPinMousedown);
+  mainPinElement.addEventListener(`keydown`, onMainPinEnterPressed);
 };
 
 const removeMainPinListeners = () => {
-  mainPin.removeEventListener(`mousedown`, onMainPinMousedown);
-  mainPin.removeEventListener(`keydown`, onMainPinEnterPressed);
+  mainPinElement.removeEventListener(`mousedown`, onMainPinMousedown);
+  mainPinElement.removeEventListener(`keydown`, onMainPinEnterPressed);
 };
 
 const onMainPinMousedown = (event) => {
@@ -432,12 +470,12 @@ const onMainPinEnterPressed = (event) => {
   }
 };
 
-const roomsSelect = adForm.querySelector(`#room_number`);
-const guestsSelect = adForm.querySelector(`#capacity`);
+const roomsSelectElement = adFormElement.querySelector(`#room_number`);
+const guestsSelectElement = adFormElement.querySelector(`#capacity`);
 
 const guestsSelectIsValid = () => {
-  const roomsCount = parseInt(roomsSelect.value, 10);
-  const guestsCount = parseInt(guestsSelect.value, 10);
+  const roomsCount = parseInt(roomsSelectElement.value, 10);
+  const guestsCount = parseInt(guestsSelectElement.value, 10);
 
   if (roomsCount === 100 && guestsCount === 0) {
     return true;
@@ -449,8 +487,8 @@ const guestsSelectIsValid = () => {
 const setAndReportGuestsSelectValidity = () => {
   const guestsCustomValidityValue = guestsSelectIsValid() ? `` : `Вы не можете выбрать такое количество гостей`;
 
-  guestsSelect.setCustomValidity(guestsCustomValidityValue);
-  guestsSelect.reportValidity();
+  guestsSelectElement.setCustomValidity(guestsCustomValidityValue);
+  guestsSelectElement.reportValidity();
 };
 
 const onRoomsSelectChange = () => {
@@ -461,17 +499,17 @@ const onGuestsSelectChange = () => {
   setAndReportGuestsSelectValidity();
 };
 
-roomsSelect.addEventListener(`change`, onRoomsSelectChange);
-guestsSelect.addEventListener(`change`, onGuestsSelectChange);
+roomsSelectElement.addEventListener(`change`, onRoomsSelectChange);
+guestsSelectElement.addEventListener(`change`, onGuestsSelectChange);
 
 const onAdFormSubmit = (event) => {
   setAndReportGuestsSelectValidity();
-  if (!adForm.reportValidity()) {
+  if (!adFormElement.reportValidity()) {
     event.preventDefault();
   }
 };
 
-adForm.addEventListener(`submit`, onAdFormSubmit);
+adFormElement.addEventListener(`submit`, onAdFormSubmit);
 
 const showPins = () => {
   renderPinElements(ads);
@@ -483,6 +521,8 @@ const clearPins = () => {
     pin.remove();
   });
 };
+
+updatePriceAttrsByHouseTypeSelectValue();
 
 const pinTemplate = getPinTemplate();
 const cardTemplate = getCardTemplate();
