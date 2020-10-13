@@ -330,21 +330,23 @@ const addCardElementListeners = (cardElement) => {
   const cardElementCloseClick = (event) => {
     if (isMainClick(event)) {
       cardElement.remove();
-    }
-  };
-
-  const cardElementEscapePressed = (event) => {
-    if (isEscapeKey(event)) {
-      cardElement.remove();
-      document.removeEventListener(`keydown`, cardElementEscapePressed);
+      document.removeEventListener(`keydown`, onEscCardElementPressed);
     }
   };
 
   cardCloseElement.addEventListener(`click`, cardElementCloseClick);
-  document.addEventListener(`keydown`, cardElementEscapePressed);
+  document.addEventListener(`keydown`, onEscCardElementPressed);
 };
 
 const getCurrentCardElement = () => mapElement.querySelector(`.popup`);
+
+const onEscCardElementPressed = (event) => {
+  if (isEscapeKey(event)) {
+    const currentCardElement = getCurrentCardElement();
+    currentCardElement.remove();
+    document.removeEventListener(`keydown`, onEscCardElementPressed);
+  }
+};
 
 const renderCardElement = (ad) => {
   const cardElement = createCardElement(ad);
