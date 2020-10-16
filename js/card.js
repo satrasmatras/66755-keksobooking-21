@@ -1,6 +1,7 @@
 'use strict';
 
 (() => {
+  const {isMainClick} = window.utils;
   const ROOM_TYPE_KEYS = {
     'palace': `Дворец`,
     'flat': `Квартира`,
@@ -14,6 +15,8 @@
       .content
       .querySelector(`.popup`);
   };
+
+  const cardTemplate = getCardTemplate();
 
   const fillFeatureElement = (element, features) => {
     const featuresItems = element.children;
@@ -42,7 +45,7 @@
     element.append(...photoElements);
   };
 
-  const createCardElement = (ad) => {
+  const createCardElement = (ad, cardElementCallback) => {
     const cardElement = cardTemplate.cloneNode(true);
     const {author, offer} = ad;
 
@@ -116,10 +119,20 @@
       avatar.remove();
     }
 
+    const cardCloseElement = cardElement.querySelector(`.popup__close`);
+
+    const cardElementCloseClick = (event) => {
+      if (isMainClick(event)) {
+        cardElement.remove();
+        cardCloseElement.removeEventListener(`click`, cardElementCloseClick);
+        cardElementCallback();
+      }
+    };
+
+    cardCloseElement.addEventListener(`click`, cardElementCloseClick);
+
     return cardElement;
   };
-
-  const cardTemplate = getCardTemplate();
 
   window.card = {
     createCardElement

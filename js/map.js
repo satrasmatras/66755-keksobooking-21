@@ -1,34 +1,34 @@
 'use strict';
 
 (() => {
-  const {mapElement, mainPinElement} = window.elements;
-  const {isEscapeKey, isMainClick} = window.utils;
+  const {isEscapeKey, isMainClick, isEnterKey} = window.utils;
   const {generatePinElement} = window.pin;
   const {createCardElement} = window.card;
   const {setAddressInputValue} = window.form;
+  const {setMapFilterActive, setMapFilterInactive} = window.mapFilter;
 
-  const mapFiltersElement = mapElement.querySelector(`.map__filters`);
+  const mapElement = document.querySelector(`.map`);
+  const mainPinElement = mapElement.querySelector(`.map__pin--main`);
+
   const mapPinsElement = document.querySelector(`.map__pins`);
   const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
 
-  const addCardElementListeners = (cardElement) => {
-    const cardCloseElement = cardElement.querySelector(`.popup__close`);
+  const getCurrentCardElement = () => mapElement.querySelector(`.popup`);
 
-    const cardElementCloseClick = (event) => {
-      if (isMainClick(event)) {
-        cardElement.remove();
-        document.removeEventListener(`keydown`, onEscCardElementPressed);
-      }
-    };
-
-    cardCloseElement.addEventListener(`click`, cardElementCloseClick);
-    document.addEventListener(`keydown`, onEscCardElementPressed);
+  const onEscCardElementPressed = (event) => {
+    if (isEscapeKey(event)) {
+      const currentCardElement = getCurrentCardElement();
+      currentCardElement.remove();
+      document.removeEventListener(`keydown`, onEscCardElementPressed);
+    }
   };
 
   const renderCardElement = (ad) => {
-    const cardElement = createCardElement(ad);
+    document.addEventListener(`keydown`, onEscCardElementPressed);
 
-    addCardElementListeners(cardElement);
+    const cardElement = createCardElement(ad, () => {
+      document.removeEventListener(`keydown`, onEscCardElementPressed);
+    });
 
     const previousCardElement = getCurrentCardElement();
 
@@ -38,8 +38,6 @@
       mapElement.insertBefore(cardElement, mapFilterContainerElement);
     }
   };
-
-  const getCurrentCardElement = () => mapElement.querySelector(`.popup`);
 
   const renderPinElements = (ads) => {
     const fragment = document.createDocumentFragment();
@@ -61,16 +59,6 @@
     });
   };
 
-  const setMapActive = () => {
-    mapElement.classList.remove(`map--faded`);
-    mapFiltersElement.classList.remove(`map__filters--disabled`);
-  };
-
-  const setMapInactive = () => {
-    mapElement.classList.add(`map--faded`);
-    mapFiltersElement.classList.add(`map__filters--disabled`);
-  };
-
   const MainPinPointer = {
     WIDTH: 10,
     HEIGHT: 22
@@ -80,30 +68,66 @@
     const {left, top} = getComputedStyle(mainPinElement);
     const {offsetWidth, offsetHeight} = mainPinElement;
 
-    const pinLocationX = parseInt(left, 10) + offsetWidth / 2;
-    const pinLocationY = parseInt(top, 10) + offsetHeight + MainPinPointer.HEIGHT;
+    const x = parseInt(left, 10) + offsetWidth / 2;
+    const y = parseInt(top, 10) + offsetHeight + MainPinPointer.HEIGHT;
 
-    return [pinLocationX, pinLocationY];
-  };
-
-  const onEscCardElementPressed = (event) => {
-    if (isEscapeKey(event)) {
-      const currentCardElement = getCurrentCardElement();
-      currentCardElement.remove();
-      document.removeEventListener(`keydown`, onEscCardElementPressed);
-    }
+    return {x, y};
   };
 
   const updateAddressInput = () => {
-    const [x, y] = getMainPinCoords();
-    setAddressInputValue(x, y);
+    const {x, y} = getMainPinCoords();
+    setAddressInputValue(`${x}, ${y}`);
+  };
+
+  const setMapActive = (ads) => {
+    mapElement.classList.remove(`map--faded`);
+    setMapFilterActive();
+    renderPinElements(ads);
+  };
+
+  const setMapInactive = (mainPinCallback) => {
+    mapElement.classList.add(`map--faded`);
+    setMapFilterInactive();
+
+    const onMainPinClick = (event) => {
+      if (isMainClick(event)) {
+        mainPinCallback();
+        mainPinElement.removeEventListener(`click`, onMainPinClick);
+        mainPinElement.removeEventListener(`keydown`, onMainPinEnterPressed);
+      }
+    };
+
+    const onMainPinEnterPressed = (event) => {
+      if (isEnterKey(event)) {
+        mainPinCallback();
+        mainPinElement.removeEventListener(`click`, onMainPinClick);
+        mainPinElement.removeEventListener(`keydown`, onMainPinEnterPressed);
+      }
+    };
+
+    mainPinElement.addEventListener(`click`, onMainPinClick);
+    mainPinElement.addEventListener(`keydown`, onMainPinEnterPressed);
+
+    clearPins();
+    resetMainPinCoordinates();
+    updateAddressInput();
+  };
+
+  const mainPinInitialPositionStyles = {
+    left: mainPinElement.style.left,
+    top: mainPinElement.style.top
+  };
+
+  const resetMainPinCoordinates = () => {
+    const {left, top} = mainPinInitialPositionStyles;
+    mainPinElement.style.left = left;
+    mainPinElement.style.top = top;
   };
 
   window.map = {
     setMapActive,
     setMapInactive,
     updateAddressInput,
-    renderPinElements,
-    clearPins
+    resetMainPinCoordinates
   };
 })();

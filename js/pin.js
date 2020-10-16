@@ -17,7 +17,7 @@
 
   const pinTemplate = getPinTemplate();
 
-  const generatePinElement = (ad, cb) => {
+  const generatePinElement = (ad, pinCallback) => {
     const pinElement = pinTemplate.cloneNode(true);
 
     pinElement.style.left = `${ad.location.x - Pin.WIDTH / 2}px`;
@@ -29,13 +29,13 @@
 
     const onPinElementClick = (event) => {
       if (isMainClick(event)) {
-        cb();
+        pinCallback();
       }
     };
 
     const onPinElementEnterPressed = (event) => {
       if (isEnterKey(event)) {
-        cb();
+        pinCallback();
       }
     };
 

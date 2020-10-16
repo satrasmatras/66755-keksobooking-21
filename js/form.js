@@ -96,8 +96,8 @@
     }
   };
 
-  const setAddressInputValue = (x, y) => {
-    addressInputElement.value = `${x}, ${y}`;
+  const setAddressInputValue = (value) => {
+    addressInputElement.value = value;
   };
 
   adFormElement.addEventListener(`submit`, onAdFormSubmit);

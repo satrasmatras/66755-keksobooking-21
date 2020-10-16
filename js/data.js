@@ -127,7 +127,10 @@
     return ads;
   };
 
+  const ADS_COUNT = 8;
+  const ads = generateAds(ADS_COUNT);
+
   window.data = {
-    generateAds
+    ads
   };
 })();
