@@ -43,15 +43,13 @@
 
   const renderPinElements = (ads) => {
     const fragment = document.createDocumentFragment();
-    const pinElements = [];
 
     ads.forEach((ad) => {
       const pinElement = generatePinElement(ad);
       addPinListeners(pinElement, ad);
-      pinElements.push(pinElement);
+      fragment.append(pinElement);
     });
 
-    fragment.append(...pinElements);
     mapPinsElement.append(fragment);
   };
 
