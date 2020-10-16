@@ -29,13 +29,13 @@
 
     const onPinElementClick = (event) => {
       if (isMainClick(event)) {
-        cb(ad);
+        cb();
       }
     };
 
     const onPinElementEnterPressed = (event) => {
       if (isEnterKey(event)) {
-        cb(ad);
+        cb();
       }
     };
 
