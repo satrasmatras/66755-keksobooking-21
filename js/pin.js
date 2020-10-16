@@ -1,6 +1,8 @@
 'use strict';
 
 (() => {
+  const {isMainClick, isEnterKey} = window.utils;
+
   const getPinTemplate = () => {
     return document
       .querySelector(`#pin`)
@@ -15,7 +17,7 @@
 
   const pinTemplate = getPinTemplate();
 
-  const generatePinElement = (ad) => {
+  const generatePinElement = (ad, cb) => {
     const pinElement = pinTemplate.cloneNode(true);
 
     pinElement.style.left = `${ad.location.x - Pin.WIDTH / 2}px`;
@@ -24,6 +26,21 @@
     const pinImage = pinElement.querySelector(`img`);
     pinImage.src = ad.author.avatar;
     pinImage.alt = ad.offer.title;
+
+    const onPinElementClick = (event) => {
+      if (isMainClick(event)) {
+        cb(ad);
+      }
+    };
+
+    const onPinElementEnterPressed = (event) => {
+      if (isEnterKey(event)) {
+        cb(ad);
+      }
+    };
+
+    pinElement.addEventListener(`click`, onPinElementClick);
+    pinElement.addEventListener(`keydown`, onPinElementEnterPressed);
 
     return pinElement;
   };

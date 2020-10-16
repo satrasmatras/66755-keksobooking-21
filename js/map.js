@@ -2,7 +2,7 @@
 
 (() => {
   const {mapElement, mainPinElement} = window.elements;
-  const {isEscapeKey, isMainClick, isEnterKey} = window.utils;
+  const {isEscapeKey, isMainClick} = window.utils;
   const {generatePinElement} = window.pin;
   const {createCardElement} = window.card;
   const {setAddressInputValue} = window.form;
@@ -45,33 +45,13 @@
     const fragment = document.createDocumentFragment();
 
     ads.forEach((ad) => {
-      const pinElement = generatePinElement(ad);
-      addPinListeners(pinElement, ad);
+      const pinElement = generatePinElement(ad, () => {
+        renderCardElement(ad);
+      });
       fragment.append(pinElement);
     });
 
     mapPinsElement.append(fragment);
-  };
-
-  const addPinListeners = (pinElement, ad) => {
-    const onPinElementClick = (event) => {
-      if (isMainClick(event)) {
-        renderCardElement(ad);
-      }
-    };
-
-    const onPinElementEnterPressed = (event) => {
-      if (isEnterKey(event)) {
-        renderCardElement(ad);
-      }
-    };
-
-    const addPinElementListeners = () => {
-      pinElement.addEventListener(`click`, onPinElementClick);
-      pinElement.addEventListener(`keydown`, onPinElementEnterPressed);
-    };
-
-    addPinElementListeners();
   };
 
   const clearPins = () => {
