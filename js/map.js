@@ -26,8 +26,6 @@
 
   window.map = {
     setMapActive,
-    setMapInactive,
-    updateAddressInput,
-    resetMainPinCoordinates
+    setMapInactive
   };
 })();
