@@ -2,6 +2,7 @@
 
 (() => {
   const {isMainClick, isEnterKey} = window.utils;
+  const {renderCardElement} = window.card;
 
   const getPinTemplate = () => {
     return document
@@ -17,7 +18,7 @@
 
   const pinTemplate = getPinTemplate();
 
-  const generatePinElement = (ad, pinCallback) => {
+  const generatePinElement = (ad) => {
     const pinElement = pinTemplate.cloneNode(true);
 
     pinElement.style.left = `${ad.location.x - Pin.WIDTH / 2}px`;
@@ -29,13 +30,13 @@
 
     const onPinElementClick = (event) => {
       if (isMainClick(event)) {
-        pinCallback();
+        renderCardElement(ad);
       }
     };
 
     const onPinElementEnterPressed = (event) => {
       if (isEnterKey(event)) {
-        pinCallback();
+        renderCardElement(ad);
       }
     };
 

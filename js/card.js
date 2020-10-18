@@ -1,7 +1,11 @@
 'use strict';
 
 (() => {
-  const {isMainClick} = window.utils;
+  const {isMainClick, isEscapeKey} = window.utils;
+  const {mapElement} = window.elements;
+
+  const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
+
   const ROOM_TYPE_KEYS = {
     'palace': `Дворец`,
     'flat': `Квартира`,
@@ -45,7 +49,7 @@
     element.append(...photoElements);
   };
 
-  const createCardElement = (ad, cardElementCallback) => {
+  const createCardElement = (ad) => {
     const cardElement = cardTemplate.cloneNode(true);
     const {author, offer} = ad;
 
@@ -125,7 +129,7 @@
       if (isMainClick(event)) {
         cardElement.remove();
         cardCloseElement.removeEventListener(`click`, cardElementCloseClick);
-        cardElementCallback();
+        document.removeEventListener(`keydown`, onEscCardElementPressed);
       }
     };
 
@@ -134,7 +138,34 @@
     return cardElement;
   };
 
+  const getCurrentCardElement = () => mapElement.querySelector(`.popup`);
+
+  const removeCurrentCardElement = () => {
+    const previousCardElement = getCurrentCardElement();
+    if (previousCardElement) {
+      previousCardElement.remove();
+    }
+  };
+
+  const onEscCardElementPressed = (event) => {
+    if (isEscapeKey(event)) {
+      removeCurrentCardElement();
+      document.removeEventListener(`keydown`, onEscCardElementPressed);
+    }
+  };
+
+  const renderCardElement = (ad) => {
+    removeCurrentCardElement();
+    document.addEventListener(`keydown`, onEscCardElementPressed);
+
+    const cardElement = createCardElement(ad);
+
+    mapElement.insertBefore(cardElement, mapFilterContainerElement);
+  };
+
   window.card = {
-    createCardElement
+    createCardElement,
+    removeCurrentCardElement,
+    renderCardElement
   };
 })();
