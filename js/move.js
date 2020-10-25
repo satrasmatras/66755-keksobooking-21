@@ -20,8 +20,11 @@
         const nextX = pageX - shift.x - parentElement.offsetLeft;
         const nextY = pageY - shift.y;
 
-        const minX = 0;
-        const maxX = parseInt(parentElement.clientWidth, 10) - element.clientWidth / 2;
+        const currentElementWidth = parseInt(element.clientWidth, 10);
+        const currentParentElementWidth = parseInt(parentElement.clientWidth, 10);
+
+        const minX = -currentElementWidth / 2;
+        const maxX = currentParentElementWidth - currentElementWidth / 2;
 
         if (minX <= nextX && nextX <= maxX) {
           element.style.left = `${nextX}px`;
