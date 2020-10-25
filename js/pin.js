@@ -1,8 +1,13 @@
 'use strict';
 
 (() => {
-  const {isMainClick, isEnterKey} = window.utils;
-  const {renderCardElement} = window.card;
+  const utils = window.utils;
+  const card = window.card;
+
+  const Pin = {
+    WIDTH: 50,
+    HEIGHT: 70
+  };
 
   const getPinTemplate = () => {
     return document
@@ -10,13 +15,6 @@
       .content
       .querySelector(`.map__pin`);
   };
-
-  const Pin = {
-    WIDTH: 50,
-    HEIGHT: 70
-  };
-
-  const pinTemplate = getPinTemplate();
 
   const generatePinElement = (ad) => {
     const pinElement = pinTemplate.cloneNode(true);
@@ -29,14 +27,14 @@
     pinImage.alt = ad.offer.title;
 
     const onPinElementClick = (event) => {
-      if (isMainClick(event)) {
-        renderCardElement(ad);
+      if (utils.isMainClick(event)) {
+        card.render(ad);
       }
     };
 
     const onPinElementEnterPressed = (event) => {
-      if (isEnterKey(event)) {
-        renderCardElement(ad);
+      if (utils.isEnterKey(event)) {
+        card.render(ad);
       }
     };
 
@@ -46,7 +44,9 @@
     return pinElement;
   };
 
+  const pinTemplate = getPinTemplate();
+
   window.pin = {
-    generatePinElement
+    generate: generatePinElement,
   };
 })();

@@ -11,6 +11,9 @@
   const timeinSelectElement = adFormElement.querySelector(`#timein`);
   const timeoutSelectElement = adFormElement.querySelector(`#timeout`);
 
+  const roomsSelectElement = adFormElement.querySelector(`#room_number`);
+  const guestsSelectElement = adFormElement.querySelector(`#capacity`);
+
   const TYPE_MIN_PRICE_MAP = {
     "bungalow": 0,
     "flat": 1000,
@@ -40,9 +43,6 @@
     timeinSelectElement.value = event.target.value;
   };
 
-  timeinSelectElement.addEventListener(`change`, onTimeinSelectChanged);
-  timeoutSelectElement.addEventListener(`change`, onTimeoutSelectChanged);
-
   const onHouseTypeSelectElement = () => {
     updatePriceAttrsByHouseTypeSelectValue();
   };
@@ -54,11 +54,6 @@
     priceInputElement.min = newMinPrice;
     priceInputElement.placeholder = newMinPrice;
   };
-
-  houseTypeSelectElement.addEventListener(`change`, onHouseTypeSelectElement);
-
-  const roomsSelectElement = adFormElement.querySelector(`#room_number`);
-  const guestsSelectElement = adFormElement.querySelector(`#capacity`);
 
   const guestsSelectIsValid = () => {
     const roomsCount = parseInt(roomsSelectElement.value, 10);
@@ -86,9 +81,6 @@
     setAndReportGuestsSelectValidity();
   };
 
-  roomsSelectElement.addEventListener(`change`, onRoomsSelectChange);
-  guestsSelectElement.addEventListener(`change`, onGuestsSelectChange);
-
   const onAdFormSubmit = (event) => {
     setAndReportGuestsSelectValidity();
     if (!adFormElement.reportValidity()) {
@@ -100,12 +92,20 @@
     addressInputElement.value = value;
   };
 
+  houseTypeSelectElement.addEventListener(`change`, onHouseTypeSelectElement);
+
+  timeinSelectElement.addEventListener(`change`, onTimeinSelectChanged);
+  timeoutSelectElement.addEventListener(`change`, onTimeoutSelectChanged);
+
+  roomsSelectElement.addEventListener(`change`, onRoomsSelectChange);
+  guestsSelectElement.addEventListener(`change`, onGuestsSelectChange);
+
   adFormElement.addEventListener(`submit`, onAdFormSubmit);
   updatePriceAttrsByHouseTypeSelectValue();
 
   window.form = {
-    setFormActive,
-    setFormInactive,
-    setAddressInputValue
+    setActive: setFormActive,
+    setInactive: setFormInactive,
+    updateAddress: setAddressInputValue
   };
 })();

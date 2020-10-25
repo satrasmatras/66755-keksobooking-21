@@ -1,7 +1,7 @@
 'use strict';
 
 (() => {
-  const {setPageInactive} = window.page;
+  const page = window.page;
 
-  setPageInactive();
+  page.setInactive();
 })();

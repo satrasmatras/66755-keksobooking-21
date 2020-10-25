@@ -1,16 +1,13 @@
 'use strict';
 
 (() => {
-  const {generatePinElement} = window.pin;
-  const {mapElement} = window.elements;
-
-  const mapPinsElement = mapElement.querySelector(`.map__pins`);
+  const pin = window.pin;
 
   const renderPinElements = (ads) => {
     const fragment = document.createDocumentFragment();
 
     ads.forEach((ad) => {
-      const pinElement = generatePinElement(ad);
+      const pinElement = pin.generate(ad);
       fragment.append(pinElement);
     });
 
@@ -18,15 +15,17 @@
   };
 
   const clearPinElements = () => {
-    const pins = mapPinsElement.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+    const pinElements = mapPinsElement.querySelectorAll(`.map__pin:not(.map__pin--main)`);
 
-    pins.forEach((pin) => {
-      pin.remove();
+    pinElements.forEach((pinElement) => {
+      pinElement.remove();
     });
   };
 
+  const mapPinsElement = document.querySelector(`.map__pins`);
+
   window.pins = {
-    renderPinElements,
-    clearPinElements
+    render: renderPinElements,
+    clear: clearPinElements
   };
 })();

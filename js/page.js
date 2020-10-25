@@ -1,25 +1,27 @@
 'use strict';
 
 (() => {
-  const {setFormInactive, setFormActive} = window.form;
-  const {setMapInactive, setMapActive} = window.map;
-  const {setFilterInactive, setFilterActive} = window.filter;
-  const {ads} = window.data;
+  const form = window.form;
+  const filter = window.filter;
+  const map = window.map;
+  const {getAds} = window.data;
 
   const setPageActive = () => {
-    setMapActive(ads);
-    setFilterActive();
-    setFormActive();
+    map.setActive(ads);
+    filter.setActive();
+    form.setActive();
   };
 
   const setPageInactive = () => {
-    setMapInactive(setPageActive);
-    setFilterInactive();
-    setFormInactive();
+    map.setInactive(setPageActive);
+    filter.setInactive();
+    form.setInactive();
   };
 
+  const ads = getAds();
+
   window.page = {
-    setPageInactive,
-    setPageActive
+    setInactive: setPageInactive,
+    setActive: setPageActive
   };
 })();

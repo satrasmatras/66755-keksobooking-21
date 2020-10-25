@@ -1,11 +1,7 @@
 'use strict';
 
 (() => {
-  const {
-    getRandomNumberInRange,
-    getRandomItemFromArray,
-    getRandomItemsFromArray
-  } = window.random;
+  const random = window.random;
 
   const TYPES = [
     `palace`,
@@ -71,25 +67,27 @@
     `http://o0.github.io/assets/images/tokyo/hotel3.jpg`,
   ];
 
+  const ADS_COUNT = 8;
+
   const generateRandomPhotoArray = () => {
-    return PHOTOS_MOCK.slice(0, getRandomNumberInRange(1, MAX_PHOTOS_COUNT));
+    return PHOTOS_MOCK.slice(0, random.getRandomNumberInRange(1, MAX_PHOTOS_COUNT));
   };
 
   const generateAd = (index) => {
     const avatar = `img/avatars/user0${index + 1}.png`;
     const title = TITLES_MOCK[index];
     const location = [
-      getRandomNumberInRange(MIN_LOCATION_X, MAX_LOCATION_X),
-      getRandomNumberInRange(MIN_LOCATION_Y, MAX_LOCATION_Y)
+      random.getRandomNumberInRange(MIN_LOCATION_X, MAX_LOCATION_X),
+      random.getRandomNumberInRange(MIN_LOCATION_Y, MAX_LOCATION_Y)
     ];
-    const price = getRandomNumberInRange(MIN_AD_PRICE, MAX_AD_PRICE);
-    const type = getRandomItemFromArray(TYPES);
-    const rooms = getRandomNumberInRange(1, MAX_ROOMS);
-    const guests = getRandomNumberInRange(1, MAX_GUESTS);
-    const checkin = getRandomItemFromArray(CHECK_TIMES);
-    const checkout = getRandomItemFromArray(CHECK_TIMES);
-    const features = getRandomItemsFromArray(FEATURES);
-    const description = getRandomItemFromArray(DESCRIPTIONS_MOCK);
+    const price = random.getRandomNumberInRange(MIN_AD_PRICE, MAX_AD_PRICE);
+    const type = random.getRandomItemFromArray(TYPES);
+    const rooms = random.getRandomNumberInRange(1, MAX_ROOMS);
+    const guests = random.getRandomNumberInRange(1, MAX_GUESTS);
+    const checkin = random.getRandomItemFromArray(CHECK_TIMES);
+    const checkout = random.getRandomItemFromArray(CHECK_TIMES);
+    const features = random.getRandomItemsFromArray(FEATURES);
+    const description = random.getRandomItemFromArray(DESCRIPTIONS_MOCK);
     const photos = generateRandomPhotoArray();
 
     return {
@@ -127,10 +125,13 @@
     return ads;
   };
 
-  const ADS_COUNT = 8;
-  const ads = generateAds(ADS_COUNT);
+  const getAds = () => data;
+
+  const data = generateAds(ADS_COUNT);
 
   window.data = {
-    ads
+    getAds,
+    MIN_LOCATION_Y,
+    MAX_LOCATION_Y
   };
 })();

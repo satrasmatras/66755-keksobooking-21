@@ -1,31 +1,27 @@
 'use strict';
 
 (() => {
-  const {renderPinElements, clearPinElements} = window.pins;
-  const {
-    setMainPinActive,
-    updateAddressInput,
-    resetMainPinCoordinates
-  } = window.mainPin;
+  const pins = window.pins;
+  const mainPin = window.mainPin;
 
-  const {mapElement} = window.elements;
+  const mapElement = document.querySelector(`.map`);
 
   const setMapActive = (ads) => {
     mapElement.classList.remove(`map--faded`);
-    renderPinElements(ads);
+    pins.render(ads);
   };
 
   const setMapInactive = (setPageActive) => {
     mapElement.classList.add(`map--faded`);
 
-    setMainPinActive(setPageActive);
-    clearPinElements();
-    resetMainPinCoordinates();
-    updateAddressInput();
+    mainPin.setActive(setPageActive);
+    pins.clear();
+    mainPin.resetCoords();
+    mainPin.updateAddressInput();
   };
 
   window.map = {
-    setMapActive,
-    setMapInactive
+    setActive: setMapActive,
+    setInactive: setMapInactive
   };
 })();

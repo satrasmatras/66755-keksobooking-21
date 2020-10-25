@@ -1,10 +1,7 @@
 'use strict';
 
 (() => {
-  const {isMainClick, isEscapeKey} = window.utils;
-  const {mapElement} = window.elements;
-
-  const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
+  const utils = window.utils;
 
   const ROOM_TYPE_KEYS = {
     'palace': `Дворец`,
@@ -19,8 +16,6 @@
       .content
       .querySelector(`.popup`);
   };
-
-  const cardTemplate = getCardTemplate();
 
   const fillFeatureElement = (element, features) => {
     const featuresItems = element.children;
@@ -126,7 +121,7 @@
     const cardCloseElement = cardElement.querySelector(`.popup__close`);
 
     const cardElementCloseClick = (event) => {
-      if (isMainClick(event)) {
+      if (utils.isMainClick(event)) {
         cardElement.remove();
         cardCloseElement.removeEventListener(`click`, cardElementCloseClick);
         document.removeEventListener(`keydown`, onEscCardElementPressed);
@@ -148,7 +143,7 @@
   };
 
   const onEscCardElementPressed = (event) => {
-    if (isEscapeKey(event)) {
+    if (utils.isEscapeKey(event)) {
       removeCurrentCardElement();
       document.removeEventListener(`keydown`, onEscCardElementPressed);
     }
@@ -163,9 +158,13 @@
     mapElement.insertBefore(cardElement, mapFilterContainerElement);
   };
 
+  const cardTemplate = getCardTemplate();
+
+  const mapElement = document.querySelector(`.map`);
+
+  const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
+
   window.card = {
-    createCardElement,
-    removeCurrentCardElement,
-    renderCardElement
+    render: renderCardElement
   };
 })();
