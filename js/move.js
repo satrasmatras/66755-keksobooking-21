@@ -19,8 +19,13 @@
       const moveElementAt = (pageX, pageY) => {
         const nextX = pageX - shift.x - parentElement.offsetLeft;
         const nextY = pageY - shift.y;
-        element.style.left = `${nextX}px`;
 
+        const minX = 0;
+        const maxX = parseInt(parentElement.clientWidth, 10) - element.clientWidth / 2;
+
+        if (minX <= nextX && nextX <= maxX) {
+          element.style.left = `${nextX}px`;
+        }
         if (MIN_Y <= nextY && nextY <= MAX_Y) {
           element.style.top = `${nextY}px`;
         }
