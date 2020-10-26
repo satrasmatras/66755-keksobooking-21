@@ -1,50 +1,62 @@
 'use strict';
 
 (() => {
-  const {isMainClick, isEnterKey} = window.utils;
-  const {setAddressInputValue} = window.form;
-  const {mapElement} = window.elements;
+  const utils = window.utils;
+  const form = window.form;
+  const move = window.move;
+  const data = window.data;
+
+  const MIN_Y = data.MIN_LOCATION_Y;
+  const MAX_Y = data.MAX_LOCATION_Y;
+
+  const MAP_LIMITS = {
+    MIN_Y,
+    MAX_Y
+  };
 
   const MainPinPointer = {
     WIDTH: 10,
     HEIGHT: 22
   };
 
+  const mapElement = document.querySelector(`.map`);
   const mainPinElement = mapElement.querySelector(`.map__pin--main`);
 
   const updateAddressInput = () => {
     const {x, y} = getMainPinCoords();
-    setAddressInputValue(`${x}, ${y}`);
+    form.updateAddress(`${x}, ${y}`);
   };
 
   const getMainPinCoords = () => {
     const {left, top} = getComputedStyle(mainPinElement);
     const {offsetWidth, offsetHeight} = mainPinElement;
 
-    const x = parseInt(left, 10) + offsetWidth / 2;
-    const y = parseInt(top, 10) + offsetHeight + MainPinPointer.HEIGHT;
+    const x = Math.round(parseInt(left, 10) + offsetWidth / 2);
+    const y = Math.round(parseInt(top, 10) + offsetHeight + MainPinPointer.HEIGHT);
 
     return {x, y};
   };
 
-  const setMainPinActive = (setPageActive) => {
+  const setMainPinActive = (mainPinCallback) => {
+    move.initialize(mainPinElement, mapElement, MAP_LIMITS, updateAddressInput);
+
     const onMainPinClick = (event) => {
-      if (isMainClick(event)) {
-        setPageActive();
-        mainPinElement.removeEventListener(`click`, onMainPinClick);
+      if (utils.isMainClick(event)) {
+        mainPinCallback();
+        mainPinElement.removeEventListener(`mousedown`, onMainPinClick);
         mainPinElement.removeEventListener(`keydown`, onMainPinEnterPressed);
       }
     };
 
     const onMainPinEnterPressed = (event) => {
-      if (isEnterKey(event)) {
-        setPageActive();
-        mainPinElement.removeEventListener(`click`, onMainPinClick);
+      if (utils.isEnterKey(event)) {
+        mainPinCallback();
+        mainPinElement.removeEventListener(`mousedown`, onMainPinClick);
         mainPinElement.removeEventListener(`keydown`, onMainPinEnterPressed);
       }
     };
 
-    mainPinElement.addEventListener(`click`, onMainPinClick);
+    mainPinElement.addEventListener(`mousedown`, onMainPinClick);
     mainPinElement.addEventListener(`keydown`, onMainPinEnterPressed);
   };
 
@@ -60,8 +72,8 @@
   };
 
   window.mainPin = {
-    updateAddressInput,
-    setMainPinActive,
-    resetMainPinCoordinates
+    resetCoords: resetMainPinCoordinates,
+    setActive: setMainPinActive,
+    updateAddressInput
   };
 })();

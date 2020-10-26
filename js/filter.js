@@ -19,7 +19,7 @@
   };
 
   window.filter = {
-    setFilterActive,
-    setFilterInactive
+    setActive: setFilterActive,
+    setInactive: setFilterInactive
   };
 })();
