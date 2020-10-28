@@ -4,12 +4,15 @@
   const form = window.form;
   const filter = window.filter;
   const map = window.map;
-  const {getAds} = window.data;
+  const backend = window.backend;
+  const message = window.message;
 
   const setPageActive = () => {
-    map.setActive(ads);
-    filter.setActive();
-    form.setActive();
+    backend.load((ads) => {
+      map.setActive(ads);
+      filter.setActive();
+      form.setActive();
+    }, message.onError);
   };
 
   const setPageInactive = () => {
@@ -17,8 +20,6 @@
     filter.setInactive();
     form.setInactive();
   };
-
-  const ads = getAds();
 
   window.page = {
     setInactive: setPageInactive,
