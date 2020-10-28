@@ -12,7 +12,7 @@
       map.setActive(ads);
       filter.setActive();
       form.setActive();
-    }, message.onError);
+    }, message.showError);
   };
 
   const setPageInactive = () => {

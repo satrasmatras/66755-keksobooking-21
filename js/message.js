@@ -3,10 +3,6 @@
 (() => {
   const utils = window.utils;
 
-  const onError = (errorMessage) => {
-    renderErrorMessageElement(errorMessage);
-  };
-
   const getErrorMessageTemplate = () => {
     return document
       .querySelector(`#error`)
@@ -75,6 +71,6 @@
   const errorMessageTemplate = getErrorMessageTemplate();
 
   window.message = {
-    onError
+    showError: renderErrorMessageElement
   };
 })();
