@@ -4,6 +4,7 @@
   const backend = window.backend;
   const error = window.error;
   const success = window.success;
+  const utils = window.utils;
 
   const adFormElement = document.querySelector(`.ad-form`);
   const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
@@ -18,11 +19,34 @@
   const roomsSelectElement = adFormElement.querySelector(`#room_number`);
   const guestsSelectElement = adFormElement.querySelector(`#capacity`);
 
+  const resetButtonElement = adFormElement.querySelector(`.ad-form__reset`);
+
   const TYPE_MIN_PRICE_MAP = {
     "bungalow": 0,
     "flat": 1000,
     "house": 5000,
     "palace": 10000
+  };
+
+  const initialize = (mainPin) => {
+    const onResetButtonElementClick = (event) => {
+      if (utils.isMainClick(event)) {
+        event.preventDefault();
+        adFormElement.reset();
+        mainPin.updateAddressInput();
+      }
+    };
+
+    const onResetButtonElementEnterPressed = (event) => {
+      if (utils.isEnterKey(event)) {
+        event.preventDefault();
+        adFormElement.reset();
+        mainPin.updateAddressInput();
+      }
+    };
+
+    resetButtonElement.addEventListener(`click`, onResetButtonElementClick);
+    resetButtonElement.addEventListener(`keydown`, onResetButtonElementEnterPressed);
   };
 
   const setFormActive = (setPageInactive) => {
@@ -33,8 +57,8 @@
 
     const onFormSaveSuccess = () => {
       success.show();
-      setPageInactive();
       adFormElement.reset();
+      setPageInactive();
     };
 
     const onAdFormSubmit = (event) => {
@@ -119,6 +143,7 @@
   updatePriceAttrsByHouseTypeSelectValue();
 
   window.form = {
+    initialize,
     setActive: setFormActive,
     setInactive: setFormInactive,
     updateAddress: setAddressInputValue
