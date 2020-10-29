@@ -25,11 +25,30 @@
     "palace": 10000
   };
 
-  const setFormActive = () => {
+  const setFormActive = (setPageInactive) => {
     adFormElement.classList.remove(`ad-form--disabled`);
     adFormFieldsetElements.forEach((fieldset) => {
       fieldset.disabled = false;
     });
+
+    const onFormSaveSuccess = () => {
+      success.show();
+      setPageInactive();
+      adFormElement.reset();
+    };
+
+    const onAdFormSubmit = (event) => {
+      event.preventDefault();
+      setAndReportGuestsSelectValidity();
+      if (adFormElement.reportValidity()) {
+        const data = new FormData(adFormElement);
+
+        backend.save(data, onFormSaveSuccess, error.show);
+        adFormElement.removeEventListener(`submit`, onAdFormSubmit);
+      }
+    };
+
+    adFormElement.addEventListener(`submit`, onAdFormSubmit);
   };
 
   const setFormInactive = () => {
@@ -85,21 +104,6 @@
     setAndReportGuestsSelectValidity();
   };
 
-  const onFormSaveSuccess = () => {
-    success.show();
-  };
-
-  const onAdFormSubmit = (event) => {
-    setAndReportGuestsSelectValidity();
-    if (!adFormElement.reportValidity()) {
-      event.preventDefault();
-
-      const data = new FormData(adFormElement);
-
-      backend.save(data, onFormSaveSuccess, error.show);
-    }
-  };
-
   const setAddressInputValue = (value) => {
     addressInputElement.value = value;
   };
@@ -112,7 +116,6 @@
   roomsSelectElement.addEventListener(`change`, onRoomsSelectChange);
   guestsSelectElement.addEventListener(`change`, onGuestsSelectChange);
 
-  adFormElement.addEventListener(`submit`, onAdFormSubmit);
   updatePriceAttrsByHouseTypeSelectValue();
 
   window.form = {

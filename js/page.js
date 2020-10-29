@@ -11,7 +11,7 @@
     backend.load((ads) => {
       map.setActive(ads);
       filter.setActive();
-      form.setActive();
+      form.setActive(setPageInactive);
     }, error.show);
   };
 
