@@ -70,7 +70,7 @@
   const main = document.querySelector(`main`);
   const errorMessageTemplate = getErrorMessageTemplate();
 
-  window.message = {
-    showError: renderErrorMessageElement
+  window.error = {
+    show: renderErrorMessageElement
   };
 })();

@@ -5,14 +5,14 @@
   const filter = window.filter;
   const map = window.map;
   const backend = window.backend;
-  const message = window.message;
+  const error = window.error;
 
   const setPageActive = () => {
     backend.load((ads) => {
       map.setActive(ads);
       filter.setActive();
       form.setActive();
-    }, message.showError);
+    }, error.show);
   };
 
   const setPageInactive = () => {

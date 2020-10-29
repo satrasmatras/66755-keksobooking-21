@@ -1,6 +1,10 @@
 'use strict';
 
 (() => {
+  const backend = window.backend;
+  const error = window.error;
+  const success = window.success;
+
   const adFormElement = document.querySelector(`.ad-form`);
   const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
 
@@ -81,10 +85,18 @@
     setAndReportGuestsSelectValidity();
   };
 
+  const onFormSaveSuccess = () => {
+    success.show();
+  };
+
   const onAdFormSubmit = (event) => {
     setAndReportGuestsSelectValidity();
     if (!adFormElement.reportValidity()) {
       event.preventDefault();
+
+      const data = new FormData(adFormElement);
+
+      backend.save(data, onFormSaveSuccess, error.show);
     }
   };
 
