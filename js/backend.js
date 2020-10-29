@@ -59,7 +59,13 @@
     xhr.send();
   };
 
+  const save = (data, onLoad, onError) => {
+    const xhr = createXHR(`POST`, URL, onLoad, onError);
+    xhr.send(data);
+  };
+
   window.backend = {
-    load
+    load,
+    save
   };
 })();
