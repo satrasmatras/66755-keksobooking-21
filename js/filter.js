@@ -54,6 +54,7 @@
       fieldset.disabled = true;
     });
 
+    mapFiltersElement.reset();
     housingTypeSelectElement.removeEventListener(`change`, onFilterElementsChange);
   };
 
