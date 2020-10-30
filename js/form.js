@@ -1,6 +1,11 @@
 'use strict';
 
 (() => {
+  const backend = window.backend;
+  const error = window.error;
+  const success = window.success;
+  const utils = window.utils;
+
   const adFormElement = document.querySelector(`.ad-form`);
   const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
 
@@ -14,6 +19,8 @@
   const roomsSelectElement = adFormElement.querySelector(`#room_number`);
   const guestsSelectElement = adFormElement.querySelector(`#capacity`);
 
+  const resetButtonElement = adFormElement.querySelector(`.ad-form__reset`);
+
   const TYPE_MIN_PRICE_MAP = {
     "bungalow": 0,
     "flat": 1000,
@@ -21,11 +28,51 @@
     "palace": 10000
   };
 
-  const setFormActive = () => {
+  const initialize = (mainPin) => {
+    const onResetButtonElementClick = (event) => {
+      if (utils.isMainClick(event)) {
+        event.preventDefault();
+        adFormElement.reset();
+        mainPin.updateAddressInput();
+      }
+    };
+
+    const onResetButtonElementEnterPressed = (event) => {
+      if (utils.isEnterKey(event)) {
+        event.preventDefault();
+        adFormElement.reset();
+        mainPin.updateAddressInput();
+      }
+    };
+
+    resetButtonElement.addEventListener(`click`, onResetButtonElementClick);
+    resetButtonElement.addEventListener(`keydown`, onResetButtonElementEnterPressed);
+  };
+
+  const setFormActive = (setPageInactive) => {
     adFormElement.classList.remove(`ad-form--disabled`);
     adFormFieldsetElements.forEach((fieldset) => {
       fieldset.disabled = false;
     });
+
+    const onFormSaveSuccess = () => {
+      success.show();
+      adFormElement.reset();
+      setPageInactive();
+    };
+
+    const onAdFormSubmit = (event) => {
+      event.preventDefault();
+      setAndReportGuestsSelectValidity();
+      if (adFormElement.reportValidity()) {
+        const data = new FormData(adFormElement);
+
+        backend.save(data, onFormSaveSuccess, error.show);
+        adFormElement.removeEventListener(`submit`, onAdFormSubmit);
+      }
+    };
+
+    adFormElement.addEventListener(`submit`, onAdFormSubmit);
   };
 
   const setFormInactive = () => {
@@ -81,13 +128,6 @@
     setAndReportGuestsSelectValidity();
   };
 
-  const onAdFormSubmit = (event) => {
-    setAndReportGuestsSelectValidity();
-    if (!adFormElement.reportValidity()) {
-      event.preventDefault();
-    }
-  };
-
   const setAddressInputValue = (value) => {
     addressInputElement.value = value;
   };
@@ -100,10 +140,10 @@
   roomsSelectElement.addEventListener(`change`, onRoomsSelectChange);
   guestsSelectElement.addEventListener(`change`, onGuestsSelectChange);
 
-  adFormElement.addEventListener(`submit`, onAdFormSubmit);
   updatePriceAttrsByHouseTypeSelectValue();
 
   window.form = {
+    initialize,
     setActive: setFormActive,
     setInactive: setFormInactive,
     updateAddress: setAddressInputValue

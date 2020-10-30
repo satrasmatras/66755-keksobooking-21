@@ -23,14 +23,20 @@
     const onCloseButtonClick = (event) => {
       if (utils.isMainClick(event)) {
         errorMessageElement.remove();
+
+        errorCloseButton.addEventListener(`click`, onCloseButtonClick);
         document.removeEventListener(`keydown`, onEscPressed);
+        document.removeEventListener(`click`, onDocumentClick);
       }
     };
 
     const onCloseButtonEnterPressed = (event) => {
       if (utils.isEnterKey(event)) {
         errorMessageElement.remove();
+
+        errorCloseButton.addEventListener(`click`, onCloseButtonClick);
         document.removeEventListener(`keydown`, onEscPressed);
+        document.removeEventListener(`click`, onDocumentClick);
       }
     };
 
@@ -43,7 +49,12 @@
   const onEscPressed = (event) => {
     if (utils.isEscapeKey(event)) {
       removeCurrentErrorMessageElement();
-      document.removeEventListener(`keydown`, onEscPressed);
+    }
+  };
+
+  const onDocumentClick = (event) => {
+    if (utils.isMainClick(event)) {
+      removeCurrentErrorMessageElement();
     }
   };
 
@@ -53,6 +64,7 @@
     const errorMessageElement = createErrorMessageElement(errorMessage);
 
     document.addEventListener(`keydown`, onEscPressed);
+    document.addEventListener(`click`, onDocumentClick);
 
     main.append(errorMessageElement);
   };
@@ -65,12 +77,13 @@
     }
 
     document.removeEventListener(`keydown`, onEscPressed);
+    document.removeEventListener(`click`, onDocumentClick);
   };
 
   const main = document.querySelector(`main`);
   const errorMessageTemplate = getErrorMessageTemplate();
 
-  window.message = {
-    showError: renderErrorMessageElement
+  window.error = {
+    show: renderErrorMessageElement
   };
 })();
