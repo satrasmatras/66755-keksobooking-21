@@ -3,10 +3,13 @@
 (() => {
   const pin = window.pin;
 
+  const MAX_RENDERED_PINS_COUNT = 5;
+
   const renderPinElements = (ads) => {
     const fragment = document.createDocumentFragment();
+    const renderingAds = ads.slice(0, MAX_RENDERED_PINS_COUNT);
 
-    ads.forEach((ad) => {
+    renderingAds.forEach((ad) => {
       const pinElement = pin.generate(ad);
       fragment.append(pinElement);
     });

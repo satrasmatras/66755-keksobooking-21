@@ -13,7 +13,7 @@
   const setPageActive = () => {
     backend.load((ads) => {
       map.setActive(ads);
-      filter.setActive();
+      filter.setActive(ads);
       form.setActive(setPageInactive, mainPin);
     }, error.show);
   };
