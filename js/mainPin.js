@@ -4,10 +4,9 @@
   const utils = window.utils;
   const form = window.form;
   const move = window.move;
-  const data = window.data;
 
-  const MIN_Y = data.MIN_LOCATION_Y;
-  const MAX_Y = data.MAX_LOCATION_Y;
+  const MIN_Y = 130;
+  const MAX_Y = 630;
 
   const MAP_LIMITS = {
     MIN_Y,
