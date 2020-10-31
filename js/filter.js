@@ -3,6 +3,7 @@
 (() => {
   const pins = window.pins;
   const card = window.card;
+  const debounce = window.debounce;
 
   const ANY_VALUE = `any`;
   const LOW_PRICE_KEY = `low`;
@@ -80,18 +81,22 @@
 
   let onFilterElementsChange;
 
+  const updatePins = (ads) => {
+    const filteredAds = getFilteredAds(ads);
+    pins.clear();
+    card.clear();
+    pins.render(filteredAds);
+  };
+
   const setFilterActive = (ads) => {
     mapFiltersElement.classList.remove(`map__filters--disabled`);
     mapFiltersFieldsetElements.forEach((fieldset) => {
       fieldset.disabled = false;
     });
 
-    onFilterElementsChange = () => {
-      const filteredAds = getFilteredAds(ads);
-      pins.clear();
-      card.clear();
-      pins.render(filteredAds);
-    };
+    onFilterElementsChange = debounce(() => {
+      updatePins(ads);
+    });
 
     housingTypeSelectElement.addEventListener(`change`, onFilterElementsChange);
     housingPriceSelectElement.addEventListener(`change`, onFilterElementsChange);
@@ -103,9 +108,21 @@
   };
 
   const getFilteredAds = (ads) => {
-    return ads.filter((ad) => {
-      return adIsCorrect(ad);
-    });
+    let filteredAds = [];
+
+    for (let i = 0; i < ads.length; i++) {
+      const currentAd = ads[i];
+
+      if (adIsCorrect(currentAd)) {
+        filteredAds.push(currentAd);
+      }
+
+      if (filteredAds.length === pins.MAX_RENDERED_PINS_COUNT) {
+        break;
+      }
+    }
+
+    return filteredAds;
   };
 
   const setFilterInactive = () => {

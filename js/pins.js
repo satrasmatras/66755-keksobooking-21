@@ -29,6 +29,7 @@
 
   window.pins = {
     render: renderPinElements,
-    clear: clearPinElements
+    clear: clearPinElements,
+    MAX_RENDERED_PINS_COUNT
   };
 })();
