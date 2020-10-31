@@ -10,13 +10,8 @@
   const MIDDLE_PRICE_KEY = `middle`;
   const HIGH_PRICE_KEY = `high`;
 
-  const isAny = (value) => value === ANY_VALUE;
-
   const housingTypeIsCorrect = (itemValue, filterValue) => {
-    if (isAny(filterValue)) {
-      return true;
-    }
-    return itemValue === filterValue;
+    return filterValue === `any` ? true : itemValue === filterValue;
   };
 
   const housingPriceIsCorrect = (itemValue, filterValue) => {
@@ -34,32 +29,29 @@
   };
 
   const housingRoomsIsCorrect = (itemValue, filterValue) => {
-    if (isAny(filterValue)) {
-      return true;
-    }
-
-    return itemValue === +filterValue;
+    return filterValue === `any` ? true : itemValue === +filterValue;
   };
 
   const housingGuestsIsCorrect = (itemValue, filterValue) => {
-    if (isAny(filterValue)) {
-      return true;
-    }
-
-    return itemValue === +filterValue;
+    return filterValue === `any` ? true : itemValue === +filterValue;
   };
 
   const housingFeaturesAreCorrect = (itemFeatures, filterFeatures) => {
-    if (filterFeatures.length === 0) {
-      return true;
-    }
-    return filterFeatures.every((filterFeature) => itemFeatures.indexOf(filterFeature) !== -1);
+    return filterFeatures.length === 0 ?
+      true :
+      filterFeatures.every((filterFeature) => itemFeatures.indexOf(filterFeature) !== -1);
   };
 
   const getCheckedHousingFeatures = () => {
-    return Array.from(housingFeatureCheckboxElements)
-      .filter((checkbox) => checkbox.checked)
-      .map((checkbox) => checkbox.value);
+    let filterFeatures = [];
+
+    housingFeatureCheckboxElements.forEach((checkboxElement) => {
+      if (checkboxElement.checked) {
+        filterFeatures.push(checkboxElement.value);
+      }
+    });
+
+    return filterFeatures;
   };
 
   const adIsCorrect = (ad) => {
@@ -98,13 +90,7 @@
       updatePins(ads);
     });
 
-    housingTypeSelectElement.addEventListener(`change`, onFilterElementsChange);
-    housingPriceSelectElement.addEventListener(`change`, onFilterElementsChange);
-    housingRoomsSelectElement.addEventListener(`change`, onFilterElementsChange);
-    housingGuestsSelectElement.addEventListener(`change`, onFilterElementsChange);
-    housingFeatureCheckboxElements.forEach((checkbox) => {
-      checkbox.addEventListener(`change`, onFilterElementsChange);
-    });
+    mapFiltersElement.addEventListener(`change`, onFilterElementsChange);
   };
 
   const getFilteredAds = (ads) => {
@@ -132,13 +118,7 @@
     });
 
     mapFiltersElement.reset();
-    housingTypeSelectElement.removeEventListener(`change`, onFilterElementsChange);
-    housingPriceSelectElement.removeEventListener(`change`, onFilterElementsChange);
-    housingRoomsSelectElement.removeEventListener(`change`, onFilterElementsChange);
-    housingGuestsSelectElement.removeEventListener(`change`, onFilterElementsChange);
-    housingFeatureCheckboxElements.forEach((checkbox) => {
-      checkbox.removeEventListener(`change`, onFilterElementsChange);
-    });
+    mapFiltersElement.removeEventListener(`change`, onFilterElementsChange);
   };
 
   window.filter = {
