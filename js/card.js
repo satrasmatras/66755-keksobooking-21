@@ -140,12 +140,12 @@
     if (previousCardElement) {
       previousCardElement.remove();
     }
+    document.removeEventListener(`keydown`, onEscCardElementPressed);
   };
 
   const onEscCardElementPressed = (event) => {
     if (utils.isEscapeKey(event)) {
       removeCurrentCardElement();
-      document.removeEventListener(`keydown`, onEscCardElementPressed);
     }
   };
 
@@ -165,6 +165,7 @@
   const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
 
   window.card = {
-    render: renderCardElement
+    render: renderCardElement,
+    clear: removeCurrentCardElement
   };
 })();
