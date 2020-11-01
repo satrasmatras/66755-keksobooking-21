@@ -11,7 +11,9 @@
   const HIGH_PRICE_KEY = `high`;
 
   const housingTypeIsCorrect = (itemValue, filterValue) => {
-    return filterValue === `any` ? true : itemValue === filterValue;
+    return filterValue === ANY_VALUE ?
+      true :
+      itemValue === filterValue;
   };
 
   const housingPriceIsCorrect = (itemValue, filterValue) => {
@@ -29,11 +31,15 @@
   };
 
   const housingRoomsIsCorrect = (itemValue, filterValue) => {
-    return filterValue === `any` ? true : itemValue === +filterValue;
+    return filterValue === ANY_VALUE ?
+      true :
+      itemValue === +filterValue;
   };
 
   const housingGuestsIsCorrect = (itemValue, filterValue) => {
-    return filterValue === `any` ? true : itemValue === +filterValue;
+    return filterValue === ANY_VALUE ?
+      true :
+      itemValue === +filterValue;
   };
 
   const housingFeaturesAreCorrect = (itemFeatures, filterFeatures) => {
