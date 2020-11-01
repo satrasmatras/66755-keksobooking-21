@@ -10,6 +10,17 @@
   const MIDDLE_PRICE_KEY = `middle`;
   const HIGH_PRICE_KEY = `high`;
 
+  const mapFiltersElement = document.querySelector(`.map__filters`);
+  const mapFiltersFieldsetElements = mapFiltersElement.querySelectorAll(`input, select`);
+
+  const housingTypeSelectElement = mapFiltersElement.querySelector(`#housing-type`);
+  const housingPriceSelectElement = mapFiltersElement.querySelector(`#housing-price`);
+  const housingRoomsSelectElement = mapFiltersElement.querySelector(`#housing-rooms`);
+  const housingGuestsSelectElement = mapFiltersElement.querySelector(`#housing-guests`);
+  const housingFeatureCheckboxElements = mapFiltersElement.querySelectorAll(`.map__checkbox`);
+
+  let onFilterElementsChange;
+
   const housingTypeIsCorrect = (itemValue, filterValue) => {
     return filterValue === ANY_VALUE ?
       true :
@@ -62,22 +73,11 @@
 
   const adIsCorrect = (ad) => {
     return housingTypeIsCorrect(ad.offer.type, housingTypeSelectElement.value) &&
-    housingPriceIsCorrect(ad.offer.price, housingPriceSelectElement.value) &&
-    housingRoomsIsCorrect(ad.offer.rooms, housingRoomsSelectElement.value) &&
-    housingGuestsIsCorrect(ad.offer.guests, housingGuestsSelectElement.value) &&
-    housingFeaturesAreCorrect(ad.offer.features, getCheckedHousingFeatures());
+      housingPriceIsCorrect(ad.offer.price, housingPriceSelectElement.value) &&
+      housingRoomsIsCorrect(ad.offer.rooms, housingRoomsSelectElement.value) &&
+      housingGuestsIsCorrect(ad.offer.guests, housingGuestsSelectElement.value) &&
+      housingFeaturesAreCorrect(ad.offer.features, getCheckedHousingFeatures());
   };
-
-  const mapFiltersElement = document.querySelector(`.map__filters`);
-  const mapFiltersFieldsetElements = mapFiltersElement.querySelectorAll(`input, select`);
-
-  const housingTypeSelectElement = mapFiltersElement.querySelector(`#housing-type`);
-  const housingPriceSelectElement = mapFiltersElement.querySelector(`#housing-price`);
-  const housingRoomsSelectElement = mapFiltersElement.querySelector(`#housing-rooms`);
-  const housingGuestsSelectElement = mapFiltersElement.querySelector(`#housing-guests`);
-  const housingFeatureCheckboxElements = mapFiltersElement.querySelectorAll(`.map__checkbox`);
-
-  let onFilterElementsChange;
 
   const updatePins = (ads) => {
     const filteredAds = getFilteredAds(ads);
