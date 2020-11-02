@@ -8,8 +8,6 @@
   const error = window.error;
   const mainPin = window.mainPin;
 
-  form.initialize(mainPin);
-
   const setPageActive = () => {
     backend.load((ads) => {
       map.setActive(ads);
@@ -23,6 +21,8 @@
     filter.setInactive();
     form.setInactive();
   };
+
+  form.initialize(setPageInactive);
 
   window.page = {
     setInactive: setPageInactive,

@@ -28,20 +28,18 @@
     "palace": 10000
   };
 
-  const initialize = (mainPin) => {
+  const initialize = (setPageInactive) => {
     const onResetButtonElementClick = (event) => {
       if (utils.isMainClick(event)) {
         event.preventDefault();
-        adFormElement.reset();
-        mainPin.updateAddressInput();
+        setPageInactive();
       }
     };
 
     const onResetButtonElementEnterPressed = (event) => {
       if (utils.isEnterKey(event)) {
         event.preventDefault();
-        adFormElement.reset();
-        mainPin.updateAddressInput();
+        setPageInactive();
       }
     };
 
