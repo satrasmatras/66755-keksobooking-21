@@ -1,89 +1,87 @@
 'use strict';
 
-(() => {
-  const utils = window.utils;
+const utils = window.utils;
 
-  const getErrorMessageTemplate = () => {
-    return document
-      .querySelector(`#error`)
-      .content
-      .querySelector(`.error`);
-  };
+const getErrorMessageTemplate = () => {
+  return document
+    .querySelector(`#error`)
+    .content
+    .querySelector(`.error`);
+};
 
-  const getCurrentErrorMessage = () => document.querySelector(`.error`);
+const getCurrentErrorMessage = () => document.querySelector(`.error`);
 
-  const createErrorMessageElement = (errorMessage) => {
-    const errorMessageElement = errorMessageTemplate.cloneNode(true);
+const createErrorMessageElement = (errorMessage) => {
+  const errorMessageElement = errorMessageTemplate.cloneNode(true);
 
-    const errorMessageText = errorMessageElement.querySelector(`.error__message`);
-    errorMessageText.textContent = errorMessage;
+  const errorMessageText = errorMessageElement.querySelector(`.error__message`);
+  errorMessageText.textContent = errorMessage;
 
-    const errorCloseButton = errorMessageElement.querySelector(`.error__button`);
+  const errorCloseButton = errorMessageElement.querySelector(`.error__button`);
 
-    const onCloseButtonClick = (event) => {
-      if (utils.isMainClick(event)) {
-        errorMessageElement.remove();
-
-        errorCloseButton.addEventListener(`click`, onCloseButtonClick);
-        document.removeEventListener(`keydown`, onEscPressed);
-        document.removeEventListener(`click`, onDocumentClick);
-      }
-    };
-
-    const onCloseButtonEnterPressed = (event) => {
-      if (utils.isEnterKey(event)) {
-        errorMessageElement.remove();
-
-        errorCloseButton.addEventListener(`click`, onCloseButtonClick);
-        document.removeEventListener(`keydown`, onEscPressed);
-        document.removeEventListener(`click`, onDocumentClick);
-      }
-    };
-
-    errorCloseButton.addEventListener(`click`, onCloseButtonClick);
-    errorCloseButton.addEventListener(`keydown`, onCloseButtonEnterPressed);
-
-    return errorMessageElement;
-  };
-
-  const onEscPressed = (event) => {
-    if (utils.isEscapeKey(event)) {
-      removeCurrentErrorMessageElement();
-    }
-  };
-
-  const onDocumentClick = (event) => {
+  const onCloseButtonClick = (event) => {
     if (utils.isMainClick(event)) {
-      removeCurrentErrorMessageElement();
+      errorMessageElement.remove();
+
+      errorCloseButton.addEventListener(`click`, onCloseButtonClick);
+      document.removeEventListener(`keydown`, onEscPressed);
+      document.removeEventListener(`click`, onDocumentClick);
     }
   };
 
-  const renderErrorMessageElement = (errorMessage) => {
+  const onCloseButtonEnterPressed = (event) => {
+    if (utils.isEnterKey(event)) {
+      errorMessageElement.remove();
+
+      errorCloseButton.addEventListener(`click`, onCloseButtonClick);
+      document.removeEventListener(`keydown`, onEscPressed);
+      document.removeEventListener(`click`, onDocumentClick);
+    }
+  };
+
+  errorCloseButton.addEventListener(`click`, onCloseButtonClick);
+  errorCloseButton.addEventListener(`keydown`, onCloseButtonEnterPressed);
+
+  return errorMessageElement;
+};
+
+const onEscPressed = (event) => {
+  if (utils.isEscapeKey(event)) {
     removeCurrentErrorMessageElement();
+  }
+};
 
-    const errorMessageElement = createErrorMessageElement(errorMessage);
+const onDocumentClick = (event) => {
+  if (utils.isMainClick(event)) {
+    removeCurrentErrorMessageElement();
+  }
+};
 
-    document.addEventListener(`keydown`, onEscPressed);
-    document.addEventListener(`click`, onDocumentClick);
+const renderErrorMessageElement = (errorMessage) => {
+  removeCurrentErrorMessageElement();
 
-    main.append(errorMessageElement);
-  };
+  const errorMessageElement = createErrorMessageElement(errorMessage);
 
-  const removeCurrentErrorMessageElement = () => {
-    const currentErrorMessageElement = getCurrentErrorMessage();
+  document.addEventListener(`keydown`, onEscPressed);
+  document.addEventListener(`click`, onDocumentClick);
 
-    if (currentErrorMessageElement) {
-      currentErrorMessageElement.remove();
-    }
+  main.append(errorMessageElement);
+};
 
-    document.removeEventListener(`keydown`, onEscPressed);
-    document.removeEventListener(`click`, onDocumentClick);
-  };
+const removeCurrentErrorMessageElement = () => {
+  const currentErrorMessageElement = getCurrentErrorMessage();
 
-  const main = document.querySelector(`main`);
-  const errorMessageTemplate = getErrorMessageTemplate();
+  if (currentErrorMessageElement) {
+    currentErrorMessageElement.remove();
+  }
 
-  window.error = {
-    show: renderErrorMessageElement
-  };
-})();
+  document.removeEventListener(`keydown`, onEscPressed);
+  document.removeEventListener(`click`, onDocumentClick);
+};
+
+const main = document.querySelector(`main`);
+const errorMessageTemplate = getErrorMessageTemplate();
+
+window.error = {
+  show: renderErrorMessageElement
+};

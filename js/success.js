@@ -1,68 +1,66 @@
 'use strict';
 
-(() => {
-  const utils = window.utils;
+const utils = window.utils;
 
-  const DEFAULT_SUCCESS_MESSAGE = `Ваше объявление<br>успешно размещено!`;
+const DEFAULT_SUCCESS_MESSAGE = `Ваше объявление<br>успешно размещено!`;
 
-  const getSuccessMessageTemplate = () => {
-    return document
-      .querySelector(`#success`)
-      .content
-      .querySelector(`.success`);
-  };
+const getSuccessMessageTemplate = () => {
+  return document
+    .querySelector(`#success`)
+    .content
+    .querySelector(`.success`);
+};
 
-  const getCurrentSuccessMessage = () => document.querySelector(`.success`);
+const getCurrentSuccessMessage = () => document.querySelector(`.success`);
 
-  const createSuccessMessageElement = (successMessage) => {
-    const successMessageElement = successMessageTemplate.cloneNode(true);
+const createSuccessMessageElement = (successMessage) => {
+  const successMessageElement = successMessageTemplate.cloneNode(true);
 
-    const successMessageText = successMessageElement.querySelector(`.success__message`);
-    successMessageText.innerHTML = successMessage;
+  const successMessageText = successMessageElement.querySelector(`.success__message`);
+  successMessageText.innerHTML = successMessage;
 
-    return successMessageElement;
-  };
+  return successMessageElement;
+};
 
-  const onEscPressed = (event) => {
-    if (utils.isEscapeKey(event)) {
-      removeCurrentSuccessMessageElement();
+const onEscPressed = (event) => {
+  if (utils.isEscapeKey(event)) {
+    removeCurrentSuccessMessageElement();
+    document.removeEventListener(`keydown`, onEscPressed);
+  }
+};
+
+const renderSuccessMessageElement = (successMessage = DEFAULT_SUCCESS_MESSAGE) => {
+  removeCurrentSuccessMessageElement();
+
+  const successMessageElement = createSuccessMessageElement(successMessage);
+
+  const onDocumentClick = (event) => {
+    if (utils.isMainClick(event)) {
+      successMessageElement.remove();
+      document.removeEventListener(`click`, onDocumentClick);
       document.removeEventListener(`keydown`, onEscPressed);
     }
   };
 
-  const renderSuccessMessageElement = (successMessage = DEFAULT_SUCCESS_MESSAGE) => {
-    removeCurrentSuccessMessageElement();
+  document.addEventListener(`click`, onDocumentClick);
+  document.addEventListener(`keydown`, onEscPressed);
 
-    const successMessageElement = createSuccessMessageElement(successMessage);
+  main.append(successMessageElement);
+};
 
-    const onDocumentClick = (event) => {
-      if (utils.isMainClick(event)) {
-        successMessageElement.remove();
-        document.removeEventListener(`click`, onDocumentClick);
-        document.removeEventListener(`keydown`, onEscPressed);
-      }
-    };
+const removeCurrentSuccessMessageElement = () => {
+  const currentSuccessMessageElement = getCurrentSuccessMessage();
 
-    document.addEventListener(`click`, onDocumentClick);
-    document.addEventListener(`keydown`, onEscPressed);
+  if (currentSuccessMessageElement) {
+    currentSuccessMessageElement.remove();
+  }
 
-    main.append(successMessageElement);
-  };
+  document.removeEventListener(`keydown`, onEscPressed);
+};
 
-  const removeCurrentSuccessMessageElement = () => {
-    const currentSuccessMessageElement = getCurrentSuccessMessage();
+const main = document.querySelector(`main`);
+const successMessageTemplate = getSuccessMessageTemplate();
 
-    if (currentSuccessMessageElement) {
-      currentSuccessMessageElement.remove();
-    }
-
-    document.removeEventListener(`keydown`, onEscPressed);
-  };
-
-  const main = document.querySelector(`main`);
-  const successMessageTemplate = getSuccessMessageTemplate();
-
-  window.success = {
-    show: renderSuccessMessageElement
-  };
-})();
+window.success = {
+  show: renderSuccessMessageElement
+};
