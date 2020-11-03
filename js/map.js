@@ -2,6 +2,7 @@
 
 const pins = window.pins;
 const mainPin = window.mainPin;
+const card = window.card;
 
 const mapElement = document.querySelector(`.map`);
 
@@ -15,6 +16,7 @@ const setMapInactive = (setPageActive) => {
 
   mainPin.setActive(setPageActive);
   pins.clear();
+  card.clear();
   mainPin.resetCoords();
   mainPin.updateAddressInput();
 };
