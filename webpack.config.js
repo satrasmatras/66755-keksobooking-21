@@ -7,6 +7,7 @@ module.exports = {
     "./js/backend.js",
     "./js/error.js",
     "./js/success.js",
+    "./js/fileChooser.js",
     "./js/debounce.js",
     "./js/card.js",
     "./js/pin.js",

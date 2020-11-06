@@ -4,9 +4,22 @@ const backend = window.backend;
 const error = window.error;
 const success = window.success;
 const utils = window.utils;
+const fileChooser = window.fileChooser;
 
 const adFormElement = document.querySelector(`.ad-form`);
 const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
+
+const adAvatarPickerElement = adFormElement.querySelector(`#avatar`);
+const adAvatarPreviewImageElement = adFormElement.querySelector(`.ad-form-header__preview img`);
+const IMAGE_FILE_TYPES = [
+  `png`,
+  `jpg`,
+  `jpeg`,
+  `svg`
+];
+
+const adImagesPickerElement = adFormElement.querySelector(`#images`);
+const adImagesPreviewImageElement = adFormElement.querySelector(`.ad-form__photo`);
 
 const addressInputElement = adFormElement.querySelector(`#address`);
 const priceInputElement = adFormElement.querySelector(`#price`);
@@ -25,6 +38,37 @@ const TYPE_MIN_PRICE_MAP = {
   "flat": 1000,
   "house": 5000,
   "palace": 10000
+};
+
+const onAvatarChange = (src) => {
+  adAvatarPreviewImageElement.src = src;
+};
+
+const resetAvatarImage = () => {
+  adAvatarPreviewImageElement.src = defaultAvatarImage;
+};
+
+const resetAdImage = () => {
+  adImagesPreviewImageElement.innerHTML = ``;
+};
+
+const createAdImage = (src) => {
+  const image = document.createElement(`img`);
+  image.src = src;
+  image.alt = `Фотография жилья 1`;
+  image.style.maxWidth = `100%`;
+
+  return image;
+};
+
+const renderAdImage = (src) => {
+  resetAdImage();
+  const image = createAdImage(src);
+  adImagesPreviewImageElement.append(image);
+};
+
+const onImagesChange = (src) => {
+  renderAdImage(src);
 };
 
 const initialize = (setPageInactive) => {
@@ -77,6 +121,8 @@ const setFormInactive = () => {
   adFormFieldsetElements.forEach((fieldset) => {
     fieldset.disabled = true;
   });
+  resetAvatarImage();
+  resetAdImage();
 };
 
 const onTimeinSelectChanged = (event) => {
@@ -138,6 +184,11 @@ roomsSelectElement.addEventListener(`change`, onRoomsSelectChange);
 guestsSelectElement.addEventListener(`change`, onGuestsSelectChange);
 
 updatePriceAttrsByHouseTypeSelectValue();
+
+const defaultAvatarImage = adAvatarPreviewImageElement.src;
+
+fileChooser.init(adAvatarPickerElement, IMAGE_FILE_TYPES, onAvatarChange);
+fileChooser.init(adImagesPickerElement, IMAGE_FILE_TYPES, onImagesChange);
 
 window.form = {
   initialize,
