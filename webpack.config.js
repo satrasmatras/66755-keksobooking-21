@@ -3,7 +3,6 @@ const path = require("path");
 module.exports = {
   entry: [
     "./js/utils.js",
-    "./js/random.js",
     "./js/backend.js",
     "./js/error.js",
     "./js/success.js",
