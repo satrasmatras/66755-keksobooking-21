@@ -155,7 +155,8 @@ const guestsSelectIsValid = () => {
     return true;
   }
 
-  return roomsCount < 100 && guestsCount <= roomsCount;
+  debugger;
+  return roomsCount < 100 && guestsCount <= roomsCount && guestsCount !== 0;
 };
 
 const setAndReportGuestsSelectValidity = () => {
