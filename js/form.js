@@ -123,7 +123,6 @@ const setFormInactive = () => {
   });
   resetAvatarImage();
   resetAdImage();
-  adFormElement.reset();
   updatePriceAttrsByHouseTypeSelectValue();
 };
 
@@ -155,7 +154,6 @@ const guestsSelectIsValid = () => {
     return true;
   }
 
-  debugger;
   return roomsCount < 100 && guestsCount <= roomsCount && guestsCount !== 0;
 };
 
