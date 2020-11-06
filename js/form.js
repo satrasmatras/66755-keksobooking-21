@@ -123,6 +123,8 @@ const setFormInactive = () => {
   });
   resetAvatarImage();
   resetAdImage();
+  adFormElement.reset();
+  updatePriceAttrsByHouseTypeSelectValue();
 };
 
 const onTimeinSelectChanged = (event) => {
