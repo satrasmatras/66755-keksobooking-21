@@ -116,7 +116,8 @@ const setFormActive = (setPageInactive) => {
   adFormElement.addEventListener(`submit`, onAdFormSubmit);
 };
 
-const setFormInactive = () => {
+const setFormInactive = (mainPin) => {
+  adFormElement.reset();
   adFormElement.classList.add(`ad-form--disabled`);
   adFormFieldsetElements.forEach((fieldset) => {
     fieldset.disabled = true;
@@ -124,6 +125,7 @@ const setFormInactive = () => {
   resetAvatarImage();
   resetAdImage();
   updatePriceAttrsByHouseTypeSelectValue();
+  mainPin.updateAddressInput();
 };
 
 const onTimeinSelectChanged = (event) => {
