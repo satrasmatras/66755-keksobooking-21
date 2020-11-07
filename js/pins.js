@@ -31,5 +31,5 @@ const mapPinsElement = document.querySelector(`.map__pins`);
 window.pins = {
   render: renderPinElements,
   clear: clearPinElements,
-  MAX_RENDERED_PINS_COUNT
+  MAX_RENDER_COUNT: MAX_RENDERED_PINS_COUNT
 };

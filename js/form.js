@@ -6,39 +6,19 @@ const success = window.success;
 const utils = window.utils;
 const fileChooser = window.fileChooser;
 
-const adFormElement = document.querySelector(`.ad-form`);
-const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
-
-const adAvatarPickerElement = adFormElement.querySelector(`#avatar`);
-const adAvatarPreviewImageElement = adFormElement.querySelector(`.ad-form-header__preview img`);
-const IMAGE_FILE_TYPES = [
-  `png`,
-  `jpg`,
-  `jpeg`,
-  `svg`
-];
-
-const adImagesPickerElement = adFormElement.querySelector(`#images`);
-const adImagesPreviewImageElement = adFormElement.querySelector(`.ad-form__photo`);
-
-const addressInputElement = adFormElement.querySelector(`#address`);
-const priceInputElement = adFormElement.querySelector(`#price`);
-const houseTypeSelectElement = adFormElement.querySelector(`#type`);
-
-const timeinSelectElement = adFormElement.querySelector(`#timein`);
-const timeoutSelectElement = adFormElement.querySelector(`#timeout`);
-
-const roomsSelectElement = adFormElement.querySelector(`#room_number`);
-const guestsSelectElement = adFormElement.querySelector(`#capacity`);
-
-const resetButtonElement = adFormElement.querySelector(`.ad-form__reset`);
-
 const TYPE_MIN_PRICE_MAP = {
   "bungalow": 0,
   "flat": 1000,
   "house": 5000,
   "palace": 10000
 };
+
+const IMAGE_FILE_TYPES = [
+  `png`,
+  `jpg`,
+  `jpeg`,
+  `svg`
+];
 
 const onAvatarChange = (src) => {
   adAvatarPreviewImageElement.src = src;
@@ -178,6 +158,28 @@ const setAddressInputValue = (value) => {
   addressInputElement.value = value;
 };
 
+const adFormElement = document.querySelector(`.ad-form`);
+const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
+
+const adAvatarPickerElement = adFormElement.querySelector(`#avatar`);
+const adAvatarPreviewImageElement = adFormElement.querySelector(`.ad-form-header__preview img`);
+const defaultAvatarImage = adAvatarPreviewImageElement.src;
+
+const adImagesPickerElement = adFormElement.querySelector(`#images`);
+const adImagesPreviewImageElement = adFormElement.querySelector(`.ad-form__photo`);
+
+const addressInputElement = adFormElement.querySelector(`#address`);
+const priceInputElement = adFormElement.querySelector(`#price`);
+const houseTypeSelectElement = adFormElement.querySelector(`#type`);
+
+const timeinSelectElement = adFormElement.querySelector(`#timein`);
+const timeoutSelectElement = adFormElement.querySelector(`#timeout`);
+
+const roomsSelectElement = adFormElement.querySelector(`#room_number`);
+const guestsSelectElement = adFormElement.querySelector(`#capacity`);
+
+const resetButtonElement = adFormElement.querySelector(`.ad-form__reset`);
+
 houseTypeSelectElement.addEventListener(`change`, onHouseTypeSelectElement);
 
 timeinSelectElement.addEventListener(`change`, onTimeinSelectChanged);
@@ -187,8 +189,6 @@ roomsSelectElement.addEventListener(`change`, onRoomsSelectChange);
 guestsSelectElement.addEventListener(`change`, onGuestsSelectChange);
 
 updatePriceAttrsByHouseTypeSelectValue();
-
-const defaultAvatarImage = adAvatarPreviewImageElement.src;
 
 fileChooser.init(adAvatarPickerElement, IMAGE_FILE_TYPES, onAvatarChange);
 fileChooser.init(adImagesPickerElement, IMAGE_FILE_TYPES, onImagesChange);

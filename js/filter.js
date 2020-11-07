@@ -9,17 +9,6 @@ const LOW_PRICE_KEY = `low`;
 const MIDDLE_PRICE_KEY = `middle`;
 const HIGH_PRICE_KEY = `high`;
 
-const mapFiltersElement = document.querySelector(`.map__filters`);
-const mapFiltersFieldsetElements = mapFiltersElement.querySelectorAll(`input, select`);
-
-const housingTypeSelectElement = mapFiltersElement.querySelector(`#housing-type`);
-const housingPriceSelectElement = mapFiltersElement.querySelector(`#housing-price`);
-const housingRoomsSelectElement = mapFiltersElement.querySelector(`#housing-rooms`);
-const housingGuestsSelectElement = mapFiltersElement.querySelector(`#housing-guests`);
-const housingFeatureCheckboxElements = mapFiltersElement.querySelectorAll(`.map__checkbox`);
-
-let onFilterElementsChange;
-
 const housingTypeIsCorrect = (itemValue, filterValue) => {
   return filterValue === ANY_VALUE ?
     true :
@@ -108,7 +97,7 @@ const getFilteredAds = (ads) => {
       filteredAds.push(currentAd);
     }
 
-    if (filteredAds.length === pins.MAX_RENDERED_PINS_COUNT) {
+    if (filteredAds.length === pins.MAX_RENDER_COUNT) {
       break;
     }
   }
@@ -125,6 +114,17 @@ const setFilterInactive = () => {
   mapFiltersElement.reset();
   mapFiltersElement.removeEventListener(`change`, onFilterElementsChange);
 };
+
+const mapFiltersElement = document.querySelector(`.map__filters`);
+const mapFiltersFieldsetElements = mapFiltersElement.querySelectorAll(`input, select`);
+
+const housingTypeSelectElement = mapFiltersElement.querySelector(`#housing-type`);
+const housingPriceSelectElement = mapFiltersElement.querySelector(`#housing-price`);
+const housingRoomsSelectElement = mapFiltersElement.querySelector(`#housing-rooms`);
+const housingGuestsSelectElement = mapFiltersElement.querySelector(`#housing-guests`);
+const housingFeatureCheckboxElements = mapFiltersElement.querySelectorAll(`.map__checkbox`);
+
+let onFilterElementsChange;
 
 window.filter = {
   setActive: setFilterActive,
