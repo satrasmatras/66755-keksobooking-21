@@ -14,16 +14,16 @@ const getCurrentErrorMessage = () => document.querySelector(`.error`);
 const createErrorMessageElement = (errorMessage) => {
   const errorMessageElement = errorMessageTemplate.cloneNode(true);
 
-  const errorMessageText = errorMessageElement.querySelector(`.error__message`);
-  errorMessageText.textContent = errorMessage;
+  const errorMessageTextElement = errorMessageElement.querySelector(`.error__message`);
+  errorMessageTextElement.textContent = errorMessage;
 
-  const errorCloseButton = errorMessageElement.querySelector(`.error__button`);
+  const errorCloseButtonElement = errorMessageElement.querySelector(`.error__button`);
 
   const onCloseButtonClick = (event) => {
     if (utils.isMainClick(event)) {
       errorMessageElement.remove();
 
-      errorCloseButton.addEventListener(`click`, onCloseButtonClick);
+      errorCloseButtonElement.addEventListener(`click`, onCloseButtonClick);
       document.removeEventListener(`keydown`, onEscPressed);
       document.removeEventListener(`click`, onDocumentClick);
     }
@@ -33,14 +33,14 @@ const createErrorMessageElement = (errorMessage) => {
     if (utils.isEnterKey(event)) {
       errorMessageElement.remove();
 
-      errorCloseButton.addEventListener(`click`, onCloseButtonClick);
+      errorCloseButtonElement.addEventListener(`click`, onCloseButtonClick);
       document.removeEventListener(`keydown`, onEscPressed);
       document.removeEventListener(`click`, onDocumentClick);
     }
   };
 
-  errorCloseButton.addEventListener(`click`, onCloseButtonClick);
-  errorCloseButton.addEventListener(`keydown`, onCloseButtonEnterPressed);
+  errorCloseButtonElement.addEventListener(`click`, onCloseButtonClick);
+  errorCloseButtonElement.addEventListener(`keydown`, onCloseButtonEnterPressed);
 
   return errorMessageElement;
 };
@@ -65,7 +65,7 @@ const renderErrorMessageElement = (errorMessage) => {
   document.addEventListener(`keydown`, onEscPressed);
   document.addEventListener(`click`, onDocumentClick);
 
-  main.append(errorMessageElement);
+  mainElement.append(errorMessageElement);
 };
 
 const removeCurrentErrorMessageElement = () => {
@@ -79,7 +79,7 @@ const removeCurrentErrorMessageElement = () => {
   document.removeEventListener(`click`, onDocumentClick);
 };
 
-const main = document.querySelector(`main`);
+const mainElement = document.querySelector(`main`);
 const errorMessageTemplate = getErrorMessageTemplate();
 
 window.error = {

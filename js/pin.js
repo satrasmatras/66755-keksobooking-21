@@ -21,9 +21,9 @@ const generatePinElement = (ad) => {
   pinElement.style.left = `${ad.location.x - Pin.WIDTH / 2}px`;
   pinElement.style.top = `${ad.location.y - Pin.HEIGHT}px`;
 
-  const pinImage = pinElement.querySelector(`img`);
-  pinImage.src = ad.author.avatar;
-  pinImage.alt = ad.offer.title;
+  const pinImageElement = pinElement.querySelector(`img`);
+  pinImageElement.src = ad.author.avatar;
+  pinImageElement.alt = ad.offer.title;
 
   const onPinElementClick = (event) => {
     if (utils.isMainClick(event)) {

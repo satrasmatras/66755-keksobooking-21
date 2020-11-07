@@ -33,18 +33,19 @@ const resetAdImage = () => {
 };
 
 const createAdImage = (src) => {
-  const image = document.createElement(`img`);
-  image.src = src;
-  image.alt = `Фотография жилья 1`;
-  image.style.maxWidth = `100%`;
+  const imageElement = document.createElement(`img`);
 
-  return image;
+  imageElement.src = src;
+  imageElement.alt = `Фотография жилья 1`;
+  imageElement.style.maxWidth = `100%`;
+
+  return imageElement;
 };
 
 const renderAdImage = (src) => {
   resetAdImage();
-  const image = createAdImage(src);
-  adImagesPreviewImageElement.append(image);
+  const imageElement = createAdImage(src);
+  adImagesPreviewImageElement.append(imageElement);
 };
 
 const onImagesChange = (src) => {

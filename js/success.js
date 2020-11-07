@@ -16,8 +16,8 @@ const getCurrentSuccessMessage = () => document.querySelector(`.success`);
 const createSuccessMessageElement = (successMessage) => {
   const successMessageElement = successMessageTemplate.cloneNode(true);
 
-  const successMessageText = successMessageElement.querySelector(`.success__message`);
-  successMessageText.innerHTML = successMessage;
+  const successMessageTextElement = successMessageElement.querySelector(`.success__message`);
+  successMessageTextElement.innerHTML = successMessage;
 
   return successMessageElement;
 };
@@ -45,7 +45,7 @@ const renderSuccessMessageElement = (successMessage = DEFAULT_SUCCESS_MESSAGE) =
   document.addEventListener(`click`, onDocumentClick);
   document.addEventListener(`keydown`, onEscPressed);
 
-  main.append(successMessageElement);
+  mainElement.append(successMessageElement);
 };
 
 const removeCurrentSuccessMessageElement = () => {
@@ -58,7 +58,7 @@ const removeCurrentSuccessMessageElement = () => {
   document.removeEventListener(`keydown`, onEscPressed);
 };
 
-const main = document.querySelector(`main`);
+const mainElement = document.querySelector(`main`);
 const successMessageTemplate = getSuccessMessageTemplate();
 
 window.success = {

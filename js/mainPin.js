@@ -23,10 +23,10 @@ const getMainPinCoords = () => {
   const {left, top} = getComputedStyle(mainPinElement);
   const {offsetWidth, offsetHeight} = mainPinElement;
 
-  const mapIsDisabled = mapElement.classList.contains(`map--faded`);
+  const mapElementIsDisabled = mapElement.classList.contains(`map--faded`);
 
   const x = Math.round(parseInt(left, 10) + offsetWidth / 2);
-  const y = mapIsDisabled ?
+  const y = mapElementIsDisabled ?
     Math.round(parseInt(top, 10) + offsetHeight / 2) :
     Math.round(parseInt(top, 10) + offsetHeight + MainPinPointer.HEIGHT);
 
