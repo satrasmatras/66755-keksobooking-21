@@ -29,15 +29,19 @@ const getMainPinCoords = () => {
   const {left, top} = getComputedStyle(mainPinElement);
   const {offsetWidth, offsetHeight} = mainPinElement;
 
+  const mapIsDisabled = mapElement.classList.contains(`map--faded`);
+
   const x = Math.round(parseInt(left, 10) + offsetWidth / 2);
-  const y = Math.round(parseInt(top, 10) + offsetHeight + MainPinPointer.HEIGHT);
+  const y = mapIsDisabled ?
+    Math.round(parseInt(top, 10) + offsetHeight / 2) :
+    Math.round(parseInt(top, 10) + offsetHeight + MainPinPointer.HEIGHT);
 
   return {x, y};
 };
 
-const setMainPinActive = (mainPinCallback) => {
-  move.initialize(mainPinElement, mapElement, MAP_LIMITS, updateAddressInput);
+move.initialize(mainPinElement, mapElement, MAP_LIMITS, updateAddressInput);
 
+const setMainPinActive = (mainPinCallback) => {
   const onMainPinClick = (event) => {
     if (utils.isMainClick(event)) {
       mainPinCallback();

@@ -9,8 +9,10 @@ const renderPinElements = (ads) => {
   const renderingAds = ads.slice(0, MAX_RENDERED_PINS_COUNT);
 
   renderingAds.forEach((ad) => {
-    const pinElement = pin.generate(ad);
-    fragment.append(pinElement);
+    if (ad.offer) {
+      const pinElement = pin.generate(ad);
+      fragment.append(pinElement);
+    }
   });
 
   mapPinsElement.append(fragment);
