@@ -190,8 +190,8 @@ guestsSelectElement.addEventListener(`change`, onGuestsSelectChange);
 
 updatePriceAttrsByHouseTypeSelectValue();
 
-fileChooser.init(adAvatarPickerElement, IMAGE_FILE_TYPES, onAvatarChange);
-fileChooser.init(adImagesPickerElement, IMAGE_FILE_TYPES, onImagesChange);
+fileChooser.initialize(adAvatarPickerElement, IMAGE_FILE_TYPES, onAvatarChange);
+fileChooser.initialize(adImagesPickerElement, IMAGE_FILE_TYPES, onImagesChange);
 
 window.form = {
   initialize,

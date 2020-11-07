@@ -119,15 +119,15 @@ const createCardElement = (ad) => {
 
   const cardCloseElement = cardElement.querySelector(`.popup__close`);
 
-  const cardElementCloseClick = (event) => {
+  const onCardElementCloseClick = (event) => {
     if (utils.isMainClick(event)) {
       cardElement.remove();
-      cardCloseElement.removeEventListener(`click`, cardElementCloseClick);
+      cardCloseElement.removeEventListener(`click`, onCardElementCloseClick);
       document.removeEventListener(`keydown`, onEscCardElementPressed);
     }
   };
 
-  cardCloseElement.addEventListener(`click`, cardElementCloseClick);
+  cardCloseElement.addEventListener(`click`, onCardElementCloseClick);
 
   return cardElement;
 };
