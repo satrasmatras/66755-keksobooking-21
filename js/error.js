@@ -2,6 +2,8 @@
 
 const utils = window.utils;
 
+const mainElement = document.querySelector(`main`);
+
 const getErrorMessageTemplate = () => {
   return document
     .querySelector(`#error`)
@@ -79,7 +81,6 @@ const removeCurrentErrorMessageElement = () => {
   document.removeEventListener(`click`, onDocumentClick);
 };
 
-const mainElement = document.querySelector(`main`);
 const errorMessageTemplate = getErrorMessageTemplate();
 
 window.error = {

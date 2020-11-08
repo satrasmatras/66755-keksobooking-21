@@ -20,6 +20,27 @@ const IMAGE_FILE_TYPES = [
   `svg`
 ];
 
+const adFormElement = document.querySelector(`.ad-form`);
+const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
+
+const adAvatarPickerElement = adFormElement.querySelector(`#avatar`);
+const adAvatarPreviewImageElement = adFormElement.querySelector(`.ad-form-header__preview img`);
+
+const adImagesPickerElement = adFormElement.querySelector(`#images`);
+const adImagesPreviewImageElement = adFormElement.querySelector(`.ad-form__photo`);
+
+const addressInputElement = adFormElement.querySelector(`#address`);
+const priceInputElement = adFormElement.querySelector(`#price`);
+const houseTypeSelectElement = adFormElement.querySelector(`#type`);
+
+const timeinSelectElement = adFormElement.querySelector(`#timein`);
+const timeoutSelectElement = adFormElement.querySelector(`#timeout`);
+
+const roomsSelectElement = adFormElement.querySelector(`#room_number`);
+const guestsSelectElement = adFormElement.querySelector(`#capacity`);
+
+const resetButtonElement = adFormElement.querySelector(`.ad-form__reset`);
+
 const onAvatarChange = (src) => {
   adAvatarPreviewImageElement.src = src;
 };
@@ -159,27 +180,7 @@ const setAddressInputValue = (value) => {
   addressInputElement.value = value;
 };
 
-const adFormElement = document.querySelector(`.ad-form`);
-const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
-
-const adAvatarPickerElement = adFormElement.querySelector(`#avatar`);
-const adAvatarPreviewImageElement = adFormElement.querySelector(`.ad-form-header__preview img`);
 const defaultAvatarImage = adAvatarPreviewImageElement.src;
-
-const adImagesPickerElement = adFormElement.querySelector(`#images`);
-const adImagesPreviewImageElement = adFormElement.querySelector(`.ad-form__photo`);
-
-const addressInputElement = adFormElement.querySelector(`#address`);
-const priceInputElement = adFormElement.querySelector(`#price`);
-const houseTypeSelectElement = adFormElement.querySelector(`#type`);
-
-const timeinSelectElement = adFormElement.querySelector(`#timein`);
-const timeoutSelectElement = adFormElement.querySelector(`#timeout`);
-
-const roomsSelectElement = adFormElement.querySelector(`#room_number`);
-const guestsSelectElement = adFormElement.querySelector(`#capacity`);
-
-const resetButtonElement = adFormElement.querySelector(`.ad-form__reset`);
 
 houseTypeSelectElement.addEventListener(`change`, onHouseTypeSelectElement);
 

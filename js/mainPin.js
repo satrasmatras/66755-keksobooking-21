@@ -14,6 +14,9 @@ const MainPinPointer = {
   HEIGHT: 22
 };
 
+const mapElement = document.querySelector(`.map`);
+const mainPinElement = mapElement.querySelector(`.map__pin--main`);
+
 const updateAddressInput = () => {
   const {x, y} = getMainPinCoords();
   form.updateAddress(`${x}, ${y}`);
@@ -59,9 +62,6 @@ const resetMainPinCoordinates = () => {
   mainPinElement.style.left = left;
   mainPinElement.style.top = top;
 };
-
-const mapElement = document.querySelector(`.map`);
-const mainPinElement = mapElement.querySelector(`.map__pin--main`);
 
 const mainPinInitialPositionStyles = {
   left: mainPinElement.style.left,

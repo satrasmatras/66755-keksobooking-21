@@ -4,6 +4,8 @@ const utils = window.utils;
 
 const DEFAULT_SUCCESS_MESSAGE = `Ваше объявление<br>успешно размещено!`;
 
+const mainElement = document.querySelector(`main`);
+
 const getSuccessMessageTemplate = () => {
   return document
     .querySelector(`#success`)
@@ -58,7 +60,6 @@ const removeCurrentSuccessMessageElement = () => {
   document.removeEventListener(`keydown`, onEscPressed);
 };
 
-const mainElement = document.querySelector(`main`);
 const successMessageTemplate = getSuccessMessageTemplate();
 
 window.success = {

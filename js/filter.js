@@ -9,6 +9,15 @@ const LOW_PRICE_KEY = `low`;
 const MIDDLE_PRICE_KEY = `middle`;
 const HIGH_PRICE_KEY = `high`;
 
+const mapFiltersElement = document.querySelector(`.map__filters`);
+const mapFiltersFieldsetElements = mapFiltersElement.querySelectorAll(`input, select`);
+
+const housingTypeSelectElement = mapFiltersElement.querySelector(`#housing-type`);
+const housingPriceSelectElement = mapFiltersElement.querySelector(`#housing-price`);
+const housingRoomsSelectElement = mapFiltersElement.querySelector(`#housing-rooms`);
+const housingGuestsSelectElement = mapFiltersElement.querySelector(`#housing-guests`);
+const housingFeatureCheckboxElements = mapFiltersElement.querySelectorAll(`.map__checkbox`);
+
 const housingTypeIsCorrect = (itemValue, filterValue) => {
   return filterValue === ANY_VALUE ?
     true :
@@ -74,19 +83,6 @@ const updatePins = (ads) => {
   pins.render(filteredAds);
 };
 
-const setFilterActive = (ads) => {
-  mapFiltersElement.classList.remove(`map__filters--disabled`);
-  mapFiltersFieldsetElements.forEach((fieldset) => {
-    fieldset.disabled = false;
-  });
-
-  onFilterElementsChange = debounce(() => {
-    updatePins(ads);
-  });
-
-  mapFiltersElement.addEventListener(`change`, onFilterElementsChange);
-};
-
 const getFilteredAds = (ads) => {
   let filteredAds = [];
 
@@ -105,6 +101,19 @@ const getFilteredAds = (ads) => {
   return filteredAds;
 };
 
+const setFilterActive = (ads) => {
+  mapFiltersElement.classList.remove(`map__filters--disabled`);
+  mapFiltersFieldsetElements.forEach((fieldset) => {
+    fieldset.disabled = false;
+  });
+
+  onFilterElementsChange = debounce(() => {
+    updatePins(ads);
+  });
+
+  mapFiltersElement.addEventListener(`change`, onFilterElementsChange);
+};
+
 const setFilterInactive = () => {
   mapFiltersElement.classList.add(`map__filters--disabled`);
   mapFiltersFieldsetElements.forEach((fieldset) => {
@@ -114,15 +123,6 @@ const setFilterInactive = () => {
   mapFiltersElement.reset();
   mapFiltersElement.removeEventListener(`change`, onFilterElementsChange);
 };
-
-const mapFiltersElement = document.querySelector(`.map__filters`);
-const mapFiltersFieldsetElements = mapFiltersElement.querySelectorAll(`input, select`);
-
-const housingTypeSelectElement = mapFiltersElement.querySelector(`#housing-type`);
-const housingPriceSelectElement = mapFiltersElement.querySelector(`#housing-price`);
-const housingRoomsSelectElement = mapFiltersElement.querySelector(`#housing-rooms`);
-const housingGuestsSelectElement = mapFiltersElement.querySelector(`#housing-guests`);
-const housingFeatureCheckboxElements = mapFiltersElement.querySelectorAll(`.map__checkbox`);
 
 let onFilterElementsChange;
 

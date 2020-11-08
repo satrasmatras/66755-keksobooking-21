@@ -9,6 +9,9 @@ const ROOM_TYPE_KEYS = {
   'bungalow': `Бунгало`
 };
 
+const mapElement = document.querySelector(`.map`);
+const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
+
 const getCardTemplate = () => {
   return document
     .querySelector(`#card`)
@@ -158,10 +161,6 @@ const renderCardElement = (ad) => {
 };
 
 const cardTemplate = getCardTemplate();
-
-const mapElement = document.querySelector(`.map`);
-
-const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
 
 window.card = {
   render: renderCardElement,
