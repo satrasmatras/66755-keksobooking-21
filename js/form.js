@@ -6,17 +6,25 @@ const success = window.success;
 const utils = window.utils;
 const fileChooser = window.fileChooser;
 
-const adFormElement = document.querySelector(`.ad-form`);
-const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
+const TYPE_MIN_PRICE_MAP = {
+  "bungalow": 0,
+  "flat": 1000,
+  "house": 5000,
+  "palace": 10000
+};
 
-const adAvatarPickerElement = adFormElement.querySelector(`#avatar`);
-const adAvatarPreviewImageElement = adFormElement.querySelector(`.ad-form-header__preview img`);
 const IMAGE_FILE_TYPES = [
   `png`,
   `jpg`,
   `jpeg`,
   `svg`
 ];
+
+const adFormElement = document.querySelector(`.ad-form`);
+const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
+
+const adAvatarPickerElement = adFormElement.querySelector(`#avatar`);
+const adAvatarPreviewImageElement = adFormElement.querySelector(`.ad-form-header__preview img`);
 
 const adImagesPickerElement = adFormElement.querySelector(`#images`);
 const adImagesPreviewImageElement = adFormElement.querySelector(`.ad-form__photo`);
@@ -33,13 +41,6 @@ const guestsSelectElement = adFormElement.querySelector(`#capacity`);
 
 const resetButtonElement = adFormElement.querySelector(`.ad-form__reset`);
 
-const TYPE_MIN_PRICE_MAP = {
-  "bungalow": 0,
-  "flat": 1000,
-  "house": 5000,
-  "palace": 10000
-};
-
 const onAvatarChange = (src) => {
   adAvatarPreviewImageElement.src = src;
 };
@@ -53,18 +54,19 @@ const resetAdImage = () => {
 };
 
 const createAdImage = (src) => {
-  const image = document.createElement(`img`);
-  image.src = src;
-  image.alt = `Фотография жилья 1`;
-  image.style.maxWidth = `100%`;
+  const imageElement = document.createElement(`img`);
 
-  return image;
+  imageElement.src = src;
+  imageElement.alt = `Фотография жилья 1`;
+  imageElement.style.maxWidth = `100%`;
+
+  return imageElement;
 };
 
 const renderAdImage = (src) => {
   resetAdImage();
-  const image = createAdImage(src);
-  adImagesPreviewImageElement.append(image);
+  const imageElement = createAdImage(src);
+  adImagesPreviewImageElement.append(imageElement);
 };
 
 const onImagesChange = (src) => {
@@ -178,6 +180,8 @@ const setAddressInputValue = (value) => {
   addressInputElement.value = value;
 };
 
+const defaultAvatarImage = adAvatarPreviewImageElement.src;
+
 houseTypeSelectElement.addEventListener(`change`, onHouseTypeSelectElement);
 
 timeinSelectElement.addEventListener(`change`, onTimeinSelectChanged);
@@ -188,10 +192,8 @@ guestsSelectElement.addEventListener(`change`, onGuestsSelectChange);
 
 updatePriceAttrsByHouseTypeSelectValue();
 
-const defaultAvatarImage = adAvatarPreviewImageElement.src;
-
-fileChooser.init(adAvatarPickerElement, IMAGE_FILE_TYPES, onAvatarChange);
-fileChooser.init(adImagesPickerElement, IMAGE_FILE_TYPES, onImagesChange);
+fileChooser.initialize(adAvatarPickerElement, IMAGE_FILE_TYPES, onAvatarChange);
+fileChooser.initialize(adImagesPickerElement, IMAGE_FILE_TYPES, onImagesChange);
 
 window.form = {
   initialize,

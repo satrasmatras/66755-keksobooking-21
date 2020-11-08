@@ -18,8 +18,6 @@ const housingRoomsSelectElement = mapFiltersElement.querySelector(`#housing-room
 const housingGuestsSelectElement = mapFiltersElement.querySelector(`#housing-guests`);
 const housingFeatureCheckboxElements = mapFiltersElement.querySelectorAll(`.map__checkbox`);
 
-let onFilterElementsChange;
-
 const housingTypeIsCorrect = (itemValue, filterValue) => {
   return filterValue === ANY_VALUE ?
     true :
@@ -85,6 +83,24 @@ const updatePins = (ads) => {
   pins.render(filteredAds);
 };
 
+const getFilteredAds = (ads) => {
+  let filteredAds = [];
+
+  for (let i = 0; i < ads.length; i++) {
+    const currentAd = ads[i];
+
+    if (adIsCorrect(currentAd)) {
+      filteredAds.push(currentAd);
+    }
+
+    if (filteredAds.length === pins.MAX_RENDER_COUNT) {
+      break;
+    }
+  }
+
+  return filteredAds;
+};
+
 const setFilterActive = (ads) => {
   mapFiltersElement.classList.remove(`map__filters--disabled`);
   mapFiltersFieldsetElements.forEach((fieldset) => {
@@ -98,24 +114,6 @@ const setFilterActive = (ads) => {
   mapFiltersElement.addEventListener(`change`, onFilterElementsChange);
 };
 
-const getFilteredAds = (ads) => {
-  let filteredAds = [];
-
-  for (let i = 0; i < ads.length; i++) {
-    const currentAd = ads[i];
-
-    if (adIsCorrect(currentAd)) {
-      filteredAds.push(currentAd);
-    }
-
-    if (filteredAds.length === pins.MAX_RENDERED_PINS_COUNT) {
-      break;
-    }
-  }
-
-  return filteredAds;
-};
-
 const setFilterInactive = () => {
   mapFiltersElement.classList.add(`map__filters--disabled`);
   mapFiltersFieldsetElements.forEach((fieldset) => {
@@ -125,6 +123,8 @@ const setFilterInactive = () => {
   mapFiltersElement.reset();
   mapFiltersElement.removeEventListener(`change`, onFilterElementsChange);
 };
+
+let onFilterElementsChange;
 
 window.filter = {
   setActive: setFilterActive,

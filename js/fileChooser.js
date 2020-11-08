@@ -1,6 +1,6 @@
 'use strict';
 
-const init = (fileChooserElement, fileTypes, renderCallback) => {
+const initialize = (fileChooserElement, fileTypes, renderCallback) => {
   const fileTypeIsCorrect = (fileName) => {
     return fileTypes.some((fileType) => fileName.endsWith(fileType));
   };
@@ -22,5 +22,5 @@ const init = (fileChooserElement, fileTypes, renderCallback) => {
 };
 
 window.fileChooser = {
-  init
+  initialize
 };
