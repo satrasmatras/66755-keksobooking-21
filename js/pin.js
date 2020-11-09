@@ -31,14 +31,7 @@ const generatePinElement = (ad) => {
     }
   };
 
-  const onPinElementEnterPressed = (event) => {
-    if (utils.isEnterKey(event)) {
-      card.render(ad);
-    }
-  };
-
   pinElement.addEventListener(`click`, onPinElementClick);
-  pinElement.addEventListener(`keydown`, onPinElementEnterPressed);
 
   return pinElement;
 };
