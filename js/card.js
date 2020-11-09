@@ -20,16 +20,17 @@ const getCardTemplate = () => {
 };
 
 const fillFeatureElement = (element, features) => {
-  const featureElements = element.children;
+  const fragment = document.createDocumentFragment();
+  element.innerHTML = ``;
 
-  for (let i = 0; i < featureElements.length; i++) {
-    const featureElement = featureElements[i];
-    const featureClasses = featureElement.className;
+  features.forEach((feature) => {
+    const liElement = document.createElement(`li`);
+    liElement.classList.add(`popup__feature`);
+    liElement.classList.add(`popup__feature--${feature}`);
+    fragment.append(liElement);
+  });
 
-    if (features.every((feature) => !featureClasses.includes(feature))) {
-      featureElement.remove();
-    }
-  }
+  element.append(fragment);
 };
 
 const fillPhotosElement = (element, photos) => {
