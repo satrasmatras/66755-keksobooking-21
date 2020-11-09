@@ -5,9 +5,18 @@ const card = window.card;
 const debounce = window.debounce;
 
 const ANY_VALUE = `any`;
-const LOW_PRICE_KEY = `low`;
-const MIDDLE_PRICE_KEY = `middle`;
-const HIGH_PRICE_KEY = `high`;
+
+const PriceKeys = {
+  ANY: ANY_VALUE,
+  LOW: `low`,
+  MIDDLE: `middle`,
+  HIGH: `high`
+};
+
+const PriceValues = {
+  MIN: 10000,
+  MAX: 50000
+};
 
 const mapFiltersElement = document.querySelector(`.map__filters`);
 const mapFiltersFieldsetElements = mapFiltersElement.querySelectorAll(`input, select`);
@@ -26,14 +35,14 @@ const housingTypeIsCorrect = (itemValue, filterValue) => {
 
 const housingPriceIsCorrect = (itemValue, filterValue) => {
   switch (filterValue) {
-    case ANY_VALUE:
+    case PriceKeys.ANY:
       return true;
-    case LOW_PRICE_KEY:
-      return itemValue < 10000;
-    case MIDDLE_PRICE_KEY:
-      return itemValue >= 10000 && itemValue <= 50000;
-    case HIGH_PRICE_KEY:
-      return itemValue > 50000;
+    case PriceKeys.LOW:
+      return itemValue < PriceValues.MIN;
+    case PriceKeys.MIDDLE:
+      return itemValue >= PriceValues.MIN && itemValue <= PriceValues.MAX;
+    case PriceKeys.HIGH:
+      return itemValue > PriceValues.MAX;
     default: return false;
   }
 };
