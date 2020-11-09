@@ -4,17 +4,14 @@ const utils = window.utils;
 const form = window.form;
 const move = window.move;
 
-const MIN_Y = 130;
-const MAX_Y = 630;
-
-const MAP_LIMITS = {
-  MIN_Y,
-  MAX_Y
-};
-
 const MainPinPointer = {
   WIDTH: 10,
-  HEIGHT: 22
+  HEIGHT: 23
+};
+
+const MAP_LIMITS = {
+  MIN_Y: 130,
+  MAX_Y: 630
 };
 
 const mapElement = document.querySelector(`.map`);
@@ -29,17 +26,15 @@ const getMainPinCoords = () => {
   const {left, top} = getComputedStyle(mainPinElement);
   const {offsetWidth, offsetHeight} = mainPinElement;
 
-  const mapIsDisabled = mapElement.classList.contains(`map--faded`);
+  const mapElementIsDisabled = mapElement.classList.contains(`map--faded`);
 
   const x = Math.round(parseInt(left, 10) + offsetWidth / 2);
-  const y = mapIsDisabled ?
+  const y = mapElementIsDisabled ?
     Math.round(parseInt(top, 10) + offsetHeight / 2) :
     Math.round(parseInt(top, 10) + offsetHeight + MainPinPointer.HEIGHT);
 
   return {x, y};
 };
-
-move.initialize(mainPinElement, mapElement, MAP_LIMITS, updateAddressInput);
 
 const setMainPinActive = (mainPinCallback) => {
   const onMainPinClick = (event) => {
@@ -62,16 +57,19 @@ const setMainPinActive = (mainPinCallback) => {
   mainPinElement.addEventListener(`keydown`, onMainPinEnterPressed);
 };
 
-const mainPinInitialPositionStyles = {
-  left: mainPinElement.style.left,
-  top: mainPinElement.style.top
-};
-
 const resetMainPinCoordinates = () => {
   const {left, top} = mainPinInitialPositionStyles;
   mainPinElement.style.left = left;
   mainPinElement.style.top = top;
 };
+
+const mainPinInitialPositionStyles = {
+  left: mainPinElement.style.left,
+  top: mainPinElement.style.top
+};
+
+const mainPinOffsetY = mainPinElement.offsetHeight + MainPinPointer.HEIGHT;
+move.initialize(mainPinElement, mapElement, MAP_LIMITS, mainPinOffsetY, updateAddressInput);
 
 window.mainPin = {
   resetCoords: resetMainPinCoordinates,

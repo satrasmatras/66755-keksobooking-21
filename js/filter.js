@@ -5,9 +5,18 @@ const card = window.card;
 const debounce = window.debounce;
 
 const ANY_VALUE = `any`;
-const LOW_PRICE_KEY = `low`;
-const MIDDLE_PRICE_KEY = `middle`;
-const HIGH_PRICE_KEY = `high`;
+
+const PriceKey = {
+  ANY: ANY_VALUE,
+  LOW: `low`,
+  MIDDLE: `middle`,
+  HIGH: `high`
+};
+
+const PriceValue = {
+  MIN: 10000,
+  MAX: 50000
+};
 
 const mapFiltersElement = document.querySelector(`.map__filters`);
 const mapFiltersFieldsetElements = mapFiltersElement.querySelectorAll(`input, select`);
@@ -18,8 +27,6 @@ const housingRoomsSelectElement = mapFiltersElement.querySelector(`#housing-room
 const housingGuestsSelectElement = mapFiltersElement.querySelector(`#housing-guests`);
 const housingFeatureCheckboxElements = mapFiltersElement.querySelectorAll(`.map__checkbox`);
 
-let onFilterElementsChange;
-
 const housingTypeIsCorrect = (itemValue, filterValue) => {
   return filterValue === ANY_VALUE ?
     true :
@@ -28,14 +35,14 @@ const housingTypeIsCorrect = (itemValue, filterValue) => {
 
 const housingPriceIsCorrect = (itemValue, filterValue) => {
   switch (filterValue) {
-    case ANY_VALUE:
+    case PriceKey.ANY:
       return true;
-    case LOW_PRICE_KEY:
-      return itemValue < 10000;
-    case MIDDLE_PRICE_KEY:
-      return itemValue >= 10000 && itemValue <= 50000;
-    case HIGH_PRICE_KEY:
-      return itemValue > 50000;
+    case PriceKey.LOW:
+      return itemValue < PriceValue.MIN;
+    case PriceKey.MIDDLE:
+      return itemValue >= PriceValue.MIN && itemValue <= PriceValue.MAX;
+    case PriceKey.HIGH:
+      return itemValue > PriceValue.MAX;
     default: return false;
   }
 };
@@ -85,6 +92,24 @@ const updatePins = (ads) => {
   pins.render(filteredAds);
 };
 
+const getFilteredAds = (ads) => {
+  let filteredAds = [];
+
+  for (let i = 0; i < ads.length; i++) {
+    const currentAd = ads[i];
+
+    if (adIsCorrect(currentAd)) {
+      filteredAds.push(currentAd);
+    }
+
+    if (filteredAds.length === pins.MAX_RENDER_COUNT) {
+      break;
+    }
+  }
+
+  return filteredAds;
+};
+
 const setFilterActive = (ads) => {
   mapFiltersElement.classList.remove(`map__filters--disabled`);
   mapFiltersFieldsetElements.forEach((fieldset) => {
@@ -98,24 +123,6 @@ const setFilterActive = (ads) => {
   mapFiltersElement.addEventListener(`change`, onFilterElementsChange);
 };
 
-const getFilteredAds = (ads) => {
-  let filteredAds = [];
-
-  for (let i = 0; i < ads.length; i++) {
-    const currentAd = ads[i];
-
-    if (adIsCorrect(currentAd)) {
-      filteredAds.push(currentAd);
-    }
-
-    if (filteredAds.length === pins.MAX_RENDERED_PINS_COUNT) {
-      break;
-    }
-  }
-
-  return filteredAds;
-};
-
 const setFilterInactive = () => {
   mapFiltersElement.classList.add(`map__filters--disabled`);
   mapFiltersFieldsetElements.forEach((fieldset) => {
@@ -125,6 +132,8 @@ const setFilterInactive = () => {
   mapFiltersElement.reset();
   mapFiltersElement.removeEventListener(`change`, onFilterElementsChange);
 };
+
+let onFilterElementsChange;
 
 window.filter = {
   setActive: setFilterActive,

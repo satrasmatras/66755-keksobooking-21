@@ -8,6 +8,28 @@ const Pin = {
   HEIGHT: 70
 };
 
+const mapElement = document.querySelector(`.map`);
+
+const addPinActiveClass = (pinElement) => {
+  pinElement.classList.add(`map__pin--active`);
+};
+
+const removePinActiveClass = (pinElement) => {
+  pinElement.classList.remove(`map__pin--active`);
+};
+
+const getCurrentActivePin = () => {
+  return mapElement.querySelector(`.map__pin--active`);
+};
+
+const removeCurrentPinActiveClass = () => {
+  const currentActivePin = getCurrentActivePin();
+
+  if (currentActivePin) {
+    removePinActiveClass(currentActivePin);
+  }
+};
+
 const getPinTemplate = () => {
   return document
     .querySelector(`#pin`)
@@ -21,30 +43,28 @@ const generatePinElement = (ad) => {
   pinElement.style.left = `${ad.location.x - Pin.WIDTH / 2}px`;
   pinElement.style.top = `${ad.location.y - Pin.HEIGHT}px`;
 
-  const pinImage = pinElement.querySelector(`img`);
-  pinImage.src = ad.author.avatar;
-  pinImage.alt = ad.offer.title;
+  const pinImageElement = pinElement.querySelector(`img`);
+  pinImageElement.src = ad.author.avatar;
+  pinImageElement.alt = ad.offer.title;
 
   const onPinElementClick = (event) => {
     if (utils.isMainClick(event)) {
       card.render(ad);
-    }
-  };
-
-  const onPinElementEnterPressed = (event) => {
-    if (utils.isEnterKey(event)) {
-      card.render(ad);
+      removeCurrentPinActiveClass();
+      addPinActiveClass(pinElement);
     }
   };
 
   pinElement.addEventListener(`click`, onPinElementClick);
-  pinElement.addEventListener(`keydown`, onPinElementEnterPressed);
 
   return pinElement;
 };
 
 const pinTemplate = getPinTemplate();
 
+card.initialize(removeCurrentPinActiveClass);
+
 window.pin = {
   generate: generatePinElement,
+  removeActiveFromCurrent: removeCurrentPinActiveClass
 };

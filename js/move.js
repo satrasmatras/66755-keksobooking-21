@@ -1,6 +1,6 @@
 'use strict';
 
-const initialize = (element, parentElement, limits, mouseMoveCallback) => {
+const initialize = (element, parentElement, limits, offsetY, mouseMoveCallback) => {
   const utils = window.utils;
 
   const {MIN_Y, MAX_Y} = limits;
@@ -25,10 +25,13 @@ const initialize = (element, parentElement, limits, mouseMoveCallback) => {
       const minX = -currentElementWidth / 2;
       const maxX = currentParentElementWidth - currentElementWidth / 2;
 
+      const minY = MIN_Y - offsetY;
+      const maxY = MAX_Y - offsetY;
+
       if (minX <= nextX && nextX <= maxX) {
         element.style.left = `${nextX}px`;
       }
-      if (MIN_Y <= nextY && nextY <= MAX_Y) {
+      if (minY <= nextY && nextY <= maxY) {
         element.style.top = `${nextY}px`;
       }
     };
