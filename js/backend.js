@@ -18,7 +18,7 @@ const createXHR = (method, url, onLoad, onError) => {
 
   xhr.open(method, url);
 
-  xhr.addEventListener(`load`, function () {
+  xhr.addEventListener(`load`, () => {
     switch (xhr.status) {
       case StatusCode.OK:
         onLoad(xhr.response);
@@ -42,12 +42,12 @@ const createXHR = (method, url, onLoad, onError) => {
     }
   });
 
-  xhr.addEventListener(`error`, function () {
+  xhr.addEventListener(`error`, () => {
     onError(`Произошла ошибка соединения`);
   });
 
-  xhr.addEventListener(`timeout`, function () {
-    onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
+  xhr.addEventListener(`timeout`, () => {
+    onError(`Запрос не успел выполниться за ${xhr.timeout} мс`);
   });
 
   return xhr;

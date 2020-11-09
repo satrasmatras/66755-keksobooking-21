@@ -12,7 +12,7 @@ const initialize = (fileChooserElement, fileTypes, renderCallback) => {
     if (fileTypeIsCorrect(fileName)) {
       const reader = new FileReader();
 
-      reader.addEventListener(`load`, function () {
+      reader.addEventListener(`load`, () => {
         renderCallback(reader.result);
       });
 
