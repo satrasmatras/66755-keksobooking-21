@@ -6,14 +6,14 @@ const debounce = window.debounce;
 
 const ANY_VALUE = `any`;
 
-const PriceKeys = {
+const PriceKey = {
   ANY: ANY_VALUE,
   LOW: `low`,
   MIDDLE: `middle`,
   HIGH: `high`
 };
 
-const PriceValues = {
+const PriceValue = {
   MIN: 10000,
   MAX: 50000
 };
@@ -35,14 +35,14 @@ const housingTypeIsCorrect = (itemValue, filterValue) => {
 
 const housingPriceIsCorrect = (itemValue, filterValue) => {
   switch (filterValue) {
-    case PriceKeys.ANY:
+    case PriceKey.ANY:
       return true;
-    case PriceKeys.LOW:
-      return itemValue < PriceValues.MIN;
-    case PriceKeys.MIDDLE:
-      return itemValue >= PriceValues.MIN && itemValue <= PriceValues.MAX;
-    case PriceKeys.HIGH:
-      return itemValue > PriceValues.MAX;
+    case PriceKey.LOW:
+      return itemValue < PriceValue.MIN;
+    case PriceKey.MIDDLE:
+      return itemValue >= PriceValue.MIN && itemValue <= PriceValue.MAX;
+    case PriceKey.HIGH:
+      return itemValue > PriceValue.MAX;
     default: return false;
   }
 };
