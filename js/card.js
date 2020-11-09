@@ -12,6 +12,12 @@ const ROOM_TYPE_KEYS = {
 const mapElement = document.querySelector(`.map`);
 const mapFilterContainerElement = mapElement.querySelector(`.map__filters-container`);
 
+let removeCurrentPinActiveClass;
+
+const initialize = (removeCurrentPinActiveClassFunction) => {
+  removeCurrentPinActiveClass = removeCurrentPinActiveClassFunction;
+};
+
 const getCardTemplate = () => {
   return document
     .querySelector(`#card`)
@@ -122,6 +128,7 @@ const createCardElement = (ad) => {
   const onCardElementCloseClick = (event) => {
     if (utils.isMainClick(event)) {
       cardElement.remove();
+      removeCurrentPinActiveClass();
       cardCloseElement.removeEventListener(`click`, onCardElementCloseClick);
       document.removeEventListener(`keydown`, onEscCardElementPressed);
     }
@@ -145,6 +152,7 @@ const removeCurrentCardElement = () => {
 const onEscCardElementPressed = (event) => {
   if (utils.isEscapeKey(event)) {
     removeCurrentCardElement();
+    removeCurrentPinActiveClass();
   }
 };
 
@@ -160,6 +168,7 @@ const renderCardElement = (ad) => {
 const cardTemplate = getCardTemplate();
 
 window.card = {
+  initialize,
   render: renderCardElement,
   clear: removeCurrentCardElement
 };

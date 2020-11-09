@@ -8,6 +8,28 @@ const Pin = {
   HEIGHT: 70
 };
 
+const mapElement = document.querySelector(`.map`);
+
+const addPinActiveClass = (pinElement) => {
+  pinElement.classList.add(`map__pin--active`);
+};
+
+const removePinActiveClass = (pinElement) => {
+  pinElement.classList.remove(`map__pin--active`);
+};
+
+const getCurrentActivePin = () => {
+  return mapElement.querySelector(`.map__pin--active`);
+};
+
+const removeCurrentPinActiveClass = () => {
+  const currentActivePin = getCurrentActivePin();
+
+  if (currentActivePin) {
+    removePinActiveClass(currentActivePin);
+  }
+};
+
 const getPinTemplate = () => {
   return document
     .querySelector(`#pin`)
@@ -28,6 +50,8 @@ const generatePinElement = (ad) => {
   const onPinElementClick = (event) => {
     if (utils.isMainClick(event)) {
       card.render(ad);
+      removeCurrentPinActiveClass();
+      addPinActiveClass(pinElement);
     }
   };
 
@@ -38,6 +62,9 @@ const generatePinElement = (ad) => {
 
 const pinTemplate = getPinTemplate();
 
+card.initialize(removeCurrentPinActiveClass);
+
 window.pin = {
   generate: generatePinElement,
+  removeActiveFromCurrent: removeCurrentPinActiveClass
 };
