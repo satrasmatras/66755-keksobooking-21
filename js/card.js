@@ -47,11 +47,15 @@ const fillPhotosElement = (element, photos) => {
   element.append(...photoElements);
 };
 
+const cardNodeIsEmpty = (node) => {
+  return !node.textContent.trim() && !node.src && !node.children.length;
+};
+
 const removeEmptyCardChildren = (cardElement) => {
   const nodes = cardElement.children;
 
   Array.from(nodes).forEach((node) => {
-    if (!node.textContent.trim() && !node.src && !node.children.length) {
+    if (cardNodeIsEmpty(node)) {
       node.remove();
     }
   });
