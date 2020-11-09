@@ -4,14 +4,14 @@ const utils = window.utils;
 const form = window.form;
 const move = window.move;
 
+const MainPinPointer = {
+  WIDTH: 10,
+  HEIGHT: 23
+};
+
 const MAP_LIMITS = {
   MIN_Y: 130,
   MAX_Y: 630
-};
-
-const MainPinPointer = {
-  WIDTH: 10,
-  HEIGHT: 22
 };
 
 const mapElement = document.querySelector(`.map`);
@@ -68,7 +68,8 @@ const mainPinInitialPositionStyles = {
   top: mainPinElement.style.top
 };
 
-move.initialize(mainPinElement, mapElement, MAP_LIMITS, updateAddressInput);
+const mainPinOffsetY = mainPinElement.offsetHeight + MainPinPointer.HEIGHT;
+move.initialize(mainPinElement, mapElement, MAP_LIMITS, mainPinOffsetY, updateAddressInput);
 
 window.mainPin = {
   resetCoords: resetMainPinCoordinates,
